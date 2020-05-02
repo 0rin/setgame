@@ -1,0 +1,98 @@
+.svg_element {
+    position: relative;
+}
+
+.red {
+    stroke: red;
+}
+
+.green {
+    stroke: green;
+}
+
+.blue {
+    stroke: blue;
+}
+
+.open {
+    fill: none;
+}
+
+.red_solid {
+    fill: red;
+}
+
+.green_solid {
+    fill: green;
+}
+
+.blue_solid {
+    fill: blue;
+}
+
+.red_striped {
+    fill:url(#stripes_red);
+}
+
+.green_striped {
+    fill:url(#stripes_green);
+}
+
+.blue_striped {
+    fill:url(#stripes_blue);
+}
+
+.oval {
+    stroke-width: 30px;
+}
+
+.diamond {
+    vector-effect: non-scaling-stroke;
+    stroke-width: 3px;
+}
+
+.rectangle {
+    stroke-width: 30px;
+}
+
+.card_outline {
+    border: 2px solid black;
+    border-radius: 25px;
+    width: 200px;
+    height: 300px;
+    max-height: 300px;
+    min-height: 300px;
+    padding-left: 10px;
+    display: table-cell;
+}
+
+.card_outline_1 {
+    padding-top: 200px;
+}
+
+.card_outline_2 {
+    padding-top: 60px;
+}
+
+.card_outline_3 {
+    padding-top: 0px;
+}
+
+.row {
+    display: table-row;
+    height: 100px;
+    max-height: 100px;
+    min-height: 100px;
+}
+
+.column_space {
+    display: table-cell;
+    width: 10px;
+}
+
+.row_space {
+    display: table-row;
+    height: 10px;
+}
+
+
