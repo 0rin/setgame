@@ -59,7 +59,12 @@
             {% endif %}
         {% endfor %}
     {% endif %}
-    <button id="start_new_game" type="button">New Game</button>
+    <form action="{% url 'new_game' %}" method="POST">
+        {% csrf_token %}
+        <button id="new_game" type="submit" name="new_game" value="game">
+            New Game
+        </button>
+    </form>
   </body>
 </html>
 
