@@ -2,6 +2,7 @@ from django.shortcuts import render
 # from django.http import HttpResponse
 import random
 
+
 def home(request):
     deck = [{'color': color,
              'shading': shading,

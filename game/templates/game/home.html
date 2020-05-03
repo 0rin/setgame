@@ -15,7 +15,7 @@
             {% if forloop.counter == 1 or forloop.counter == 5 or forloop.counter == 9 %}
                 <div class="row">
             {% endif %}
-            <button class="card_outline card_outline_{{ card.number }}">
+            <button class="card_outline">
             {% for n in card.range %}
                 <svg class="svg_element"
                     width="200" height="60"
@@ -26,8 +26,8 @@
                         id="stripes_{{ card.color }}"
                         spreadMethod="repeat"
                         x1="0%" x2="10%" y1="0%" y2="10%"
-                        gradientTransform="rotate(-45) scale(0.2)">
-                        <stop offset="0.1"
+                        gradientTransform="rotate(-45) scale(0.3)">
+                        <stop offset="0.2"
                               stop-color="{{ card.color }}"
                               stop-opacity="1"/>
                         <stop offset="0"
@@ -55,10 +55,11 @@
             <div class="column_space"></div>
             {% if forloop.counter == 4 or forloop.counter == 8 or forloop.counter == 12 %}
                 </div>
-                <div class="row_space"></div>
+
             {% endif %}
         {% endfor %}
     {% endif %}
+    <button id="start_new_game" type="button">New Game</button>
   </body>
 </html>
 
