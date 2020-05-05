@@ -24,8 +24,11 @@ class Deck(object):
         deck = Deck.new_shuffled_deck(self)
         return [deck.pop() for i in range(n)]
 
-class SetupCards(object):
-    """docstring for SetupCards"""
+class Cards(object):
+    """
+    docstring for Cards
+    This class should be able to return a number of drawn cards,
+    as well as keeping track of the remainder in the deck
+    """
 
-    cards = Deck()
-    setup_cards = cards.take_n_cards(12)
+    setup_cards = Deck().take_n_cards(12)
