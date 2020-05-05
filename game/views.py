@@ -8,11 +8,14 @@ import random
 
 
 def new_game(request):
-    print('begin new_game method')
     if request.method == 'POST':
-        # KNOP IS INGEDRUKT DUS NIEUWE KAARTEN NEERLEGGEN
-        print('POST, ik wil nieuwe kaarten')
-        new_cards = Deck()
-        Cards.setup_cards = new_cards.take_n_cards(12)
+        new_deck = Deck()
+        Cards.deck = new_deck.new_shuffled_deck()
+        print('\t\tNew deck with:', len(Cards.deck), 'cards')
+        Cards.setup_cards = Cards.take_n_cards(12)
+        print('\t\t', len(Cards.deck), 'cards left after setting game up')
+        Cards.take_n_cards(3)
+        print('\t\t', len(Cards.deck), 'cards left after taking another 3.')
+
         return HttpResponseRedirect(reverse('new_game'))
     return render(request, 'game/home.html', {'setup_cards': Cards.setup_cards})
