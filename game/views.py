@@ -9,13 +9,14 @@ import random
 
 def new_game(request):
     if request.method == 'POST':
-        new_shuffled_deck = Deck().new_shuffled_deck()
-        Cards.deck = new_shuffled_deck
-        print('\t\tNew deck with:', len(Cards.deck), 'cards')
-        Cards.setup_cards = Cards.take_n_cards(12)
-        print('\t\t', len(Cards.deck), 'cards left after setting game up')
-        Cards.take_n_cards(3)
-        print('\t\t', len(Cards.deck), 'cards left after taking another 3.')
-
+        action = request.POST['action']
+        if action == 'new_game':
+            new_shuffled_deck = Deck().new_shuffled_deck()
+            Cards.deck = new_shuffled_deck
+            Cards.setup_cards = Cards.take_n_cards(12)
+            Cards.take_n_cards(3)
+        else:
+            Cards.setup_cards = []
+            print('a card was clicked')
         return HttpResponseRedirect(reverse('new_game'))
     return render(request, 'game/home.html', {'setup_cards': Cards.setup_cards})
