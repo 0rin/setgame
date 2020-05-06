@@ -18,7 +18,12 @@
             {% endif %}
             <button class="card_outline"
                     id="card_{{ card.id }}"
-                    onclick="myFunction(this.id)">
+                    onclick="cardClicked(this.id,
+                                        '{{ card.color }}',
+                                        '{{ card.number }}',
+                                        '{{ card.shading }}',
+                                        '{{ card.shape }}'
+                                        )">
             {% for n in card.range %}
                 <svg class="svg_element"
                     width="200" height="60"
