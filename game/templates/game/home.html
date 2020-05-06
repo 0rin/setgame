@@ -22,7 +22,7 @@
             {% csrf_token %}
                 <button type="button"
                     class="card_outline"
-                    id="card_{{ card.id }}"
+                    id="{{ card.id }}"
                     name="action"
                     value="card_clicked"
                     onclick="cardClicked(this.id,
