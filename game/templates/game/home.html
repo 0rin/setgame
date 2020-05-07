@@ -93,13 +93,15 @@
     </form>
     {% if set_existence_requested %}
         {% if a_set %}
-            {% for card in a_set %}
-                <script type="text/javascript">
+            <script type="text/javascript">
                     (function () {
-        document.getElementById('{{ card.id }}').style.background = "lightGrey"
+                    alert('There is a set. Want a hint?')
+                    } ());
+                    console.log('{{ a_set.id }}')
+                    (function () {
+        document.getElementById('{{ a_set.id }}').style.background = "lightGrey"
                     } ());
                 </script>
-            {% endfor %}
         {% else %}
             <script type="text/javascript">
                 (function () {

@@ -66,7 +66,7 @@ class Cards(object):
         """
         for combo in combinations(Cards.cards_open, 3):
             if Cards.validate_set(combo):
-                return list(combo)
+                return combo[0]
 
     @classmethod
     def validate_set(cls, combo):
