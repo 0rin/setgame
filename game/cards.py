@@ -8,12 +8,13 @@ class Deck(object):
              'shading': shading,
              'range': range(number),
              'number': number,
-             'shape': shape} for color in ['red', 'green', 'blue']
+             'shape': shape} for color in ['red']#, 'green', 'blue']
                              for number in [1, 2, 3]
                              for shading in ['solid', 'striped', 'open']
                              for shape in ['oval', 'diamond', 'rectangle']]
     for i in range(len(original_deck)):
         original_deck[i]['id'] = i
+        original_deck[i]['blank'] = False
 
     def new_shuffled_deck(self):
         """Gives a new, shuffled deck."""
@@ -65,7 +66,14 @@ class Cards(object):
         Returns a list with id's if there is a set, otherwise returns false.
         """
         for combo in combinations(Cards.cards_open, 3):
-            if Cards.validate_set(combo):
+            blank = False
+            for card in combo:
+                if card['blank']:
+                    blank = True
+                    break
+            if blank:
+                continue
+            elif Cards.validate_set(combo):
                 return combo[0]
 
     @classmethod
