@@ -9,7 +9,6 @@ import random
 def new_game(request):
     set_existence = Cards.check_set()
     if request.method == 'POST' or not Cards.cards_open:
-
         try:
             req = request.POST['req']
         except:

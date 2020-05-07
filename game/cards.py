@@ -54,7 +54,6 @@ class Cards(object):
         cards_in_set = set_found.split(',')
         for i, card in enumerate(Cards.cards_open):
             for j, set_card_id in enumerate(cards_in_set):
-                print(i, card, j, set_card_id)
                 if card['id'] == int(set_card_id):
                     Cards.cards_open[i] = Cards.take_n_cards(1)[0]
                     del cards_in_set[j]
@@ -67,8 +66,7 @@ class Cards(object):
         """
         for combo in combinations(Cards.cards_open, 3):
             if Cards.validate_set(combo):
-                print('found set', combo)
-                return combo
+                return list(combo)
 
     @classmethod
     def validate_set(cls, combo):
