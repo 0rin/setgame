@@ -6,20 +6,22 @@ from .cards import Deck, Cards
 import random
 
 
-
 def new_game(request):
-    if request.method == 'POST':
-        action = request.POST['action']
-        if action == 'new_game':
+    if request.method == 'POST' or not Cards.cards_open:
+        try:
+            req = request.POST['req']
+        except:
+            req = 'new_game'
+        if req == 'new_game':
             new_shuffled_deck = Deck().new_shuffled_deck()
             Cards.deck = new_shuffled_deck
-            Cards.setup_cards = Cards.take_n_cards(12)
+            Cards.cards_open = Cards.take_n_cards(12)
+            Cards.number_sets_found = 0
+        elif req == 'check_set':
+            pass
         else:
-            cards_in_set = action.split(',')
-            for i, card in enumerate(Cards.setup_cards):
-                for j, set_card_id in enumerate(cards_in_set):
-                    if card['id'] == int(set_card_id):
-                        Cards.setup_cards[i] = Cards.take_n_cards(1)[0]
-                        del cards_in_set[j]
+            Cards.replace_set(req)
         return HttpResponseRedirect(reverse('new_game'))
-    return render(request, 'game/home.html', {'setup_cards': Cards.setup_cards})
+    context = {'cards_open': Cards.cards_open,
+               'number_sets_found': Cards.number_sets_found}
+    return render(request, 'game/home.html', context)

@@ -11,8 +11,9 @@
   <script src="{% static '/game/js/home.js' %}"></script>
   </head>
   <body>
-    {% if setup_cards %}
-        {% for card in setup_cards %}
+    <h3>sets found:{{ number_sets_found }}</h3>
+    {% if cards_open %}
+        {% for card in cards_open %}
             {% if forloop.counter == 1 or forloop.counter == 5 or forloop.counter == 9 %}
                 <div class="row">
             {% endif %}
@@ -21,9 +22,9 @@
                   id="cardForm">
             {% csrf_token %}
                 <button type="button"
-                    class="card_outline"
+                    class="card_outline {{ card.blank }}"
                     id="{{ card.id }}"
-                    name="action"
+                    name="req"
                     value="card_clicked"
                     onclick="cardClicked(this.id,
                                         '{{ card.color }}',
@@ -77,8 +78,16 @@
     {% endif %}
     <form action="{% url 'new_game' %}" method="POST">
         {% csrf_token %}
-        <button id="new_game" type="submit" name="action" value="new_game">
+        <button class="button" id="new_game" type="submit" name="req"
+            value="new_game">
             New Game
+        </button>
+    </form>
+    <form action="{% url 'new_game' %}" method="POST">
+        {% csrf_token %}
+        <button class="button" id="check_set" type="submit" name="req"
+            value="check_set">
+            Set?
         </button>
     </form>
   </body>

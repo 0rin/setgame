@@ -1,5 +1,4 @@
-#new_game {
-  background-color: #4CAF50; /* Green */
+.button {
   border: none;
   color: white;
   padding: 15px 32px;
@@ -7,7 +6,15 @@
   text-decoration: none;
   display: inline-block;
   font-size: 18px;
+}
 
+#new_game {
+  background-color: #4CAF50; /* Green */
+  float: left;
+}
+
+#check_set {
+  background-color: orange;
 }
 
 .svg_element {
@@ -77,6 +84,10 @@
     width: 200px;
     height: 300px;
     display: table-cell;
+}
+
+.blank {
+    display: none;
 }
 
 .column_space {
