@@ -1,4 +1,5 @@
 import random
+from itertools import combinations
 
 
 class Deck(object):
@@ -28,6 +29,8 @@ class Cards(object):
     deck = Deck().new_shuffled_deck()
     number_sets_found = 0
     cards_open = []
+    a_set = False
+    set_existence_requested = False
 
     @classmethod
     def take_n_cards(cls, n):
@@ -55,3 +58,37 @@ class Cards(object):
                 if card['id'] == int(set_card_id):
                     Cards.cards_open[i] = Cards.take_n_cards(1)[0]
                     del cards_in_set[j]
+
+    @classmethod
+    def check_set(cls):
+        """
+        Checks if there is a set in the current open cards.
+        Returns a list with id's if there is a set, otherwise returns false.
+        """
+        for combo in combinations(Cards.cards_open, 3):
+            if Cards.validate_set(combo):
+                print('found set', combo)
+                return combo
+
+    @classmethod
+    def validate_set(cls, combo):
+        colors = []
+        numbers = []
+        shadings = []
+        shapes = []
+
+        for card in combo:
+            colors.append(card['color'])
+            numbers.append(card['number'])
+            shadings.append(card['shading'])
+            shapes.append(card['shape'])
+        properties = [colors, numbers, shadings, shapes]
+
+        for prop in properties:
+            uniq = list(dict.fromkeys(prop))
+            if len(uniq) == 2:
+                return False
+        return True
+
+
+

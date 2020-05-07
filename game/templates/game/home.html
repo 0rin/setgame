@@ -12,6 +12,15 @@
   </head>
   <body>
     <h3>sets found:{{ number_sets_found }}</h3>
+    {% if set_existence_requested %}
+        {% if a_set %}
+            <h3>There is a set</h3>
+            <h4>{{ a_set }}</h4>
+        {% else %}
+            <h3>There is no set</h3>
+        {% endif %}
+
+    {% endif %}
     {% if cards_open %}
         {% for card in cards_open %}
             {% if forloop.counter == 1 or forloop.counter == 5 or forloop.counter == 9 %}
@@ -72,7 +81,6 @@
             <div class="column_space"></div>
             {% if forloop.counter == 4 or forloop.counter == 8 or forloop.counter == 12 %}
                 </div>
-
             {% endif %}
         {% endfor %}
     {% endif %}
