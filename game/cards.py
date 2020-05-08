@@ -40,7 +40,7 @@ class Cards(object):
         """Draws n cards from the deck."""
         drawn_cards = []
 
-        # For testing purposes only
+        # For testing purposes
         setless = [{'color': 'green', 'shading': 'open', 'range': range(0, 2), 'number': 2, 'shape': 'oval', 'id': 42, 'blank': False},
                 {'color': 'blue', 'shading': 'open', 'range': range(0, 3), 'number': 3, 'shape': 'oval', 'id': 78, 'blank': False},
                 {'color': 'blue', 'shading': 'open', 'range': range(0, 1), 'number': 1, 'shape': 'oval', 'id': 60, 'blank': False},

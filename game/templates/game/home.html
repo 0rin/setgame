@@ -15,7 +15,7 @@
 
     {% if cards_open %}
         {% for card in cards_open %}
-            {% if forloop.counter0|divisibleby:4 %}
+            {% if cards_open|length == 12 and forloop.counter0|divisibleby:4 or cards_open|length == 15 and forloop.counter0|divisibleby:5 %}
                 <div class="row">
             {% endif %}
             <form action="{% url 'new_game' %}"
@@ -71,8 +71,9 @@
             </button>
             </form>
             <div class="column_space"></div>
-            {% if forloop.counter|divisibleby:4 %}
+            {% if cards_open|length == 12 and forloop.counter|divisibleby:4 or cards_open|length == 15 and forloop.counter|divisibleby:5 %}
                 </div>
+                }
             {% endif %}
         {% endfor %}
     {% endif %}
