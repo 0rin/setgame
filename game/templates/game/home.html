@@ -15,7 +15,7 @@
 
     {% if cards_open %}
         {% for card in cards_open %}
-            {% if forloop.counter == 1 or forloop.counter == 5 or forloop.counter == 9 %}
+            {% if forloop.counter0|divisibleby:4 %}
                 <div class="row">
             {% endif %}
             <form action="{% url 'new_game' %}"
@@ -71,45 +71,41 @@
             </button>
             </form>
             <div class="column_space"></div>
-            {% if forloop.counter == 4 or forloop.counter == 8 or forloop.counter == 12 %}
+            {% if forloop.counter|divisibleby:4 %}
                 </div>
-
             {% endif %}
         {% endfor %}
     {% endif %}
-    <form action="{% url 'new_game' %}" method="POST">
+    <form action="{% url 'new_game' %}" method="POST" id="another_game">
         {% csrf_token %}
         <button class="button" id="new_game" type="submit" name="req"
             value="new_game">
             New Game
         </button>
     </form>
-    <form action="{% url 'new_game' %}" method="POST" id="check_set_form" name="req" value="no_set">
+    <form action="{% url 'new_game' %}" method="POST">
         {% csrf_token %}
         <button class="button" id="check_set" type="submit" name="req"
             value="check_set">
             Set?
         </button>
     </form>
-    {% if set_existence_requested %}
-        {% if a_set %}
-            <script type="text/javascript">
-                    (function () {
-                        if (confirm('There is a set. Want a hint?')) {
-                            document.getElementById('{{ a_set.id }}')
-                                .style.background = "lightGrey"
-                        }
-                    } ());
-                </script>
-        {% else %}
-            <script type="text/javascript">
-                (function () {
-                    document.getElementById('check_set').value = 'no_set';
-                    alert('There is no set.')
-                    document.getElementById('check_set_form').submit();
-                } ());
-            </script>
-        {% endif %}
+    {% if a_set %}
+        <script type="text/javascript">
+            (function () {
+                if (confirm('There is a set. Want a hint?')) {
+                    document.getElementById('{{ a_set.id }}')
+                        .style.background = "lightGrey"
+                }
+            } ());
+        </script>
+    {% endif %}
+    {% if end_of_game %}
+        <script type="text/javascript">
+            (function () {
+                alert('End of game. There is no set, and there are no cards left.')
+            } ());
+        </script>
     {% endif %}
   </body>
 </html>
