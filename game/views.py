@@ -13,9 +13,10 @@ def new_game(request):
         except:
             req = 'new_game'
         if req == 'new_game':
+            print('new game request')
             new_shuffled_deck = Deck().new_shuffled_deck()
             Cards.deck = new_shuffled_deck
-            Cards.cards_open = Cards.take_n_cards(12)
+            Cards.cards_open = Cards.setless# take_n_cards(12)
             Cards.number_sets_found = 0
             Cards.a_set = False
             Cards.end_of_game = False
@@ -23,13 +24,14 @@ def new_game(request):
             Cards.a_set = Cards.check_set()
             if not Cards.a_set:
                 if len(Cards.deck) >= 3:
-                    Cards.cards_open = Cards.cards_open + Cards.take_n_cards(3)
+                    Cards.extra_cards_open()# = Cards.cards_open + Cards.take_n_cards(3)
                 else:
                     Cards.end_of_game = True
         else:
             Cards.end_of_game = False
             Cards.a_set = False
-            Cards.replace_set(req)
+
+            Cards.handle_found_set(req)
         return HttpResponseRedirect(reverse('new_game'))
     context = {'cards_open': Cards.cards_open,
                'number_sets_found': Cards.number_sets_found,

@@ -12,6 +12,8 @@
   </head>
   <body>
     <h3>sets found:{{ number_sets_found }}</h3>
+    <h3>{{ cards_open|length }}</h3>
+
 
     {% if cards_open %}
         {% for card in cards_open %}
