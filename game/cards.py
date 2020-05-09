@@ -34,6 +34,7 @@ class Cards(object):
     a_set = False
     set_existence_requested = False
     end_of_game = False
+    indices_of_extra_cards = []
     # For testing purposes
     setless = [{'color': 'green', 'shading': 'open', 'range': range(0, 2), 'number': 2, 'shape': 'oval', 'id': 42, 'blank': False},
             {'color': 'blue', 'shading': 'open', 'range': range(0, 3), 'number': 3, 'shape': 'oval', 'id': 78, 'blank': False},
@@ -66,61 +67,57 @@ class Cards(object):
         Handles the correct procedure after a set was found. Either replaces
         those cards, or removes them.
         """
-        replace = True if len(Cards.cards_open) == 12 else False
-        print('replace', replace)
+        extra_cards_open = len(Cards.cards_open) > 12
         Cards.number_sets_found += 1
         cards_in_set = set_found.split(',')
         to_replace = []
-        extra_cards = [4, 9, 14]
+        extra_cards = Cards.indices_of_extra_cards
+
         for i, card in enumerate(Cards.cards_open):
             for j, set_card_id in enumerate(cards_in_set):
-                print('nr cards open:', len(Cards.cards_open))
-                print('i', i)
-                print('id of card', card['id'])
-                print('set', cards_in_set)
-                print('***************************\n')
                 if card['id'] == int(set_card_id):
-                    if replace:
-                        Cards.cards_open[i] = Cards.take_n_cards(1)[0]
+                    if extra_cards_open and i in extra_cards:
+                        # Remove from extra cards
+                        extra_cards = list(set(extra_cards) - set([i]))
+                    elif extra_cards_open:
+                        # This card needs to be replaced by one of the extra cards
+                        to_replace.append(i)
                     else:
-                        if not i in extra_cards:
-                            print('to replace:', i)
-                            to_replace.append(i)
-                        else:
-                            extra_cards = list(set(extra_cards) - set([i]))
-
-
+                        Cards.cards_open[i] = Cards.take_n_cards(1)[0]
                     del cards_in_set[j]
 
-        if not replace:
-            print('...............')
-            print('...............')
-            print('to_replace', to_replace)
-            print('extra_cards', extra_cards)
+        if extra_cards_open:
+            # Copy extra cards to the positions where cards need to be replaced
+            # Note, the extra cards are not part of the set, those cards are
+            # already removed.
             for index in to_replace:
-                print('\t', Cards.cards_open)
-                print('\t....')
-                print('\t', Cards.cards_open[-1], '\nshould go to index', index)
-                print('\t------\n')
                 Cards.cards_open[index] = Cards.cards_open[extra_cards[-1]]
                 del extra_cards[-1]
-            del Cards.cards_open[14]
-            del Cards.cards_open[9]
-            del Cards.cards_open[4]
-        print('einde: nr cards open:', len(Cards.cards_open))
+            # Remove all the extra cards
+            Cards.indices_of_extra_cards.reverse()
+            for i in Cards.indices_of_extra_cards:
+                del Cards.cards_open[i]
+            Cards.indices_of_extra_cards = []
+
 
     @classmethod
-    def extra_cards_open(cls):
+    def open_extra_cards(cls):
         """
         Inserts three cards into the open cards, such that the current lay-out
         does not change.
         """
+        Cards.indices_of_extra_cards = Cards.find_indices_of_extra_cards()
+        for i in Cards.indices_of_extra_cards:
+            Cards.cards_open.insert(i, Cards.take_n_cards(1)[0])
+
+
+    @classmethod
+    def find_indices_of_extra_cards(cls):
+        result = []
         nr_cards_per_row = int(len(Cards.cards_open)/3)
         for i in range(3):
-            print(len(Cards.cards_open))
-            index = (i + 1) * nr_cards_per_row + i
-            Cards.cards_open.insert(index, Cards.take_n_cards(1)[0])
-
+            result.append((i + 1) * nr_cards_per_row + i)
+        return result
 
 
     @classmethod
@@ -141,6 +138,7 @@ class Cards(object):
                 continue
             elif Cards.validate_set(combo):
                 return combo[0]
+
 
     @classmethod
     def validate_set(cls, combo):

@@ -12,9 +12,6 @@
   </head>
   <body>
     <h3>sets found:{{ number_sets_found }}</h3>
-    <h3>{{ cards_open|length }}</h3>
-
-
     {% if cards_open %}
         {% for card in cards_open %}
             {% if cards_open|length == 12 and forloop.counter0|divisibleby:4 or cards_open|length == 15 and forloop.counter0|divisibleby:5 %}
@@ -75,7 +72,6 @@
             <div class="column_space"></div>
             {% if cards_open|length == 12 and forloop.counter|divisibleby:4 or cards_open|length == 15 and forloop.counter|divisibleby:5 %}
                 </div>
-                }
             {% endif %}
         {% endfor %}
     {% endif %}
