@@ -14,7 +14,7 @@
     <h3>sets found:{{ number_sets_found }}</h3>
     {% if cards_open %}
         {% for card in cards_open %}
-            {% if cards_open|length == 12 and forloop.counter0|divisibleby:4 or cards_open|length == 15 and forloop.counter0|divisibleby:5 %}
+            {% if forloop.counter0|divisibleby:row_length %}
                 <div class="row">
             {% endif %}
             <form action="{% url 'new_game' %}"
@@ -70,7 +70,7 @@
             </button>
             </form>
             <div class="column_space"></div>
-            {% if cards_open|length == 12 and forloop.counter|divisibleby:4 or cards_open|length == 15 and forloop.counter|divisibleby:5 %}
+            {% if forloop.counter|divisibleby:row_length %}
                 </div>
             {% endif %}
         {% endfor %}

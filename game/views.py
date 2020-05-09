@@ -35,5 +35,6 @@ def new_game(request):
     context = {'cards_open': Cards.cards_open,
                'number_sets_found': Cards.number_sets_found,
                'a_set': Cards.a_set,
-               'end_of_game': Cards.end_of_game}
+               'end_of_game': Cards.end_of_game,
+               'row_length': len(Cards.cards_open)/3}
     return render(request, 'game/home.html', context)

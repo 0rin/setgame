@@ -49,6 +49,27 @@ class Cards(object):
             {'color': 'green', 'shading': 'striped', 'range': range(0, 3), 'number': 3, 'shape': 'rectangle', 'id': 50, 'blank': False},
             {'color': 'red', 'shading': 'solid', 'range': range(0, 2), 'number': 2, 'shape': 'rectangle', 'id': 11, 'blank': False}]
 
+    cards_18 = [{'color': 'green', 'shading': 'open', 'range': range(0, 2), 'number': 2, 'shape': 'oval', 'id': 42, 'blank': False},
+            {'color': 'blue', 'shading': 'open', 'range': range(0, 3), 'number': 3, 'shape': 'oval', 'id': 78, 'blank': False},
+            {'color': 'blue', 'shading': 'open', 'range': range(0, 1), 'number': 1, 'shape': 'oval', 'id': 60, 'blank': False},
+            {'color': 'red', 'shading': 'striped', 'range': range(0, 1), 'number': 1, 'shape': 'rectangle', 'id': 5, 'blank': False},
+            {'color': 'red', 'shading': 'striped', 'range': range(0, 3), 'number': 3, 'shape': 'oval', 'id': 21, 'blank': False},
+            {'color': 'blue', 'shading': 'solid', 'range': range(0, 3), 'number': 3, 'shape': 'oval', 'id': 72, 'blank': False},
+            {'color': 'green', 'shading': 'solid', 'range': range(0, 1), 'number': 1, 'shape': 'oval', 'id': 27, 'blank': False},
+            {'color': 'blue', 'shading': 'open', 'range': range(0, 3), 'number': 3, 'shape': 'rectangle', 'id': 80, 'blank': False},
+            {'color': 'red', 'shading': 'solid', 'range': range(0, 3), 'number': 3, 'shape': 'oval', 'id': 18, 'blank': False},
+            {'color': 'green', 'shading': 'open', 'range': range(0, 3), 'number': 3, 'shape': 'diamond', 'id': 52, 'blank': False},
+            {'color': 'green', 'shading': 'striped', 'range': range(0, 3), 'number': 3, 'shape': 'rectangle', 'id': 50, 'blank': False},
+            {'color': 'red', 'shading': 'solid', 'range': range(0, 2), 'number': 2, 'shape': 'rectangle', 'id': 11, 'blank': False},
+            {'color': 'green', 'shading': 'open', 'range': range(0, 2), 'number': 2, 'shape': 'oval', 'id': 42, 'blank': False},
+            {'color': 'blue', 'shading': 'open', 'range': range(0, 3), 'number': 3, 'shape': 'oval', 'id': 78, 'blank': False},
+            {'color': 'blue', 'shading': 'open', 'range': range(0, 1), 'number': 1, 'shape': 'oval', 'id': 60, 'blank': False},
+            {'color': 'red', 'shading': 'striped', 'range': range(0, 1), 'number': 1, 'shape': 'rectangle', 'id': 5, 'blank': False},
+            {'color': 'red', 'shading': 'striped', 'range': range(0, 3), 'number': 3, 'shape': 'oval', 'id': 21, 'blank': False},
+            {'color': 'blue', 'shading': 'solid', 'range': range(0, 3), 'number': 3, 'shape': 'oval', 'id': 72, 'blank': False}]
+
+
+
     @classmethod
     def take_n_cards(cls, n):
         """Draws n cards from the deck."""
