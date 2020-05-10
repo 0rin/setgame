@@ -5,30 +5,31 @@ from django.urls import reverse
 from .cards import Deck, Cards
 import random
 
+cards = Cards()
 
 def new_game(request):
-    if request.method == 'POST' or not Cards.cards_open:
+    if request.method == 'POST' or not cards.cards_open:
         try:
             req = request.POST['req']
         except:
             req = 'new_game'
         if req == 'new_game':
-            Cards.initialize_new_game()
+            cards.new_game()
         elif req == 'check_set':
-            Cards.check_for_set()
-            if not Cards.a_set:
-                if len(Cards.deck) >= 3:
-                    Cards.open_extra_cards()
+            cards.check_for_set()
+            if not cards.a_set:
+                if len(cards.deck) >= 3:
+                    cards.open_extra_cards()
                 else:
-                    Cards.end_of_game = True
+                    cards.end_of_game = True
         else:
-            Cards.end_of_game = False
-            Cards.a_set = False
-            Cards.handle_found_set(req)
+            cards.end_of_game = False
+            cards.a_set = False
+            cards.handle_found_set(req)
         return HttpResponseRedirect(reverse('new_game'))
-    context = {'cards_open': Cards.cards_open,
-               'number_sets_found': Cards.number_sets_found,
-               'a_set': Cards.a_set,
-               'end_of_game': Cards.end_of_game,
-               'row_length': len(Cards.cards_open)/3}
+    context = {'cards_open': cards.cards_open,
+               'number_sets_found': cards.number_sets_found,
+               'a_set': cards.a_set,
+               'end_of_game': cards.end_of_game,
+               'row_length': len(cards.cards_open)/3}
     return render(request, 'game/home.html', context)
