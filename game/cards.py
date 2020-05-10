@@ -5,17 +5,16 @@ from itertools import combinations
 class Deck(object):
     """Creates a deck of set cards and provides shuffled copies of it. """
     original_deck = [{'color': color,
-             'shading': shading,
-             'range': range(number),
-             'number': number,
-             'shape': shape} for color in ['red', 'green', 'blue']
-                             for number in [1, 2, 3]
-                             for shading in ['solid', 'striped', 'open']
-                             for shape in ['oval', 'diamond', 'rectangle']]
+                      'shading': shading,
+                      'range': range(number),
+                      'number': number,
+                      'shape': shape} for color in ['red', 'green', 'blue']
+                     for number in [1, 2, 3]
+                     for shading in ['solid', 'striped', 'open']
+                     for shape in ['oval', 'diamond', 'rectangle']]
     for i in range(len(original_deck)):
         original_deck[i]['id'] = i
         original_deck[i]['blank'] = False
-
 
     def new_shuffled_deck(self):
         """Gives a new, shuffled deck."""
@@ -31,7 +30,6 @@ class Cards(object):
     positions of the open cards.
     """
 
-
     def __init__(self):
         self.deck = Deck().new_shuffled_deck()
         self.number_sets_found = 0
@@ -39,7 +37,6 @@ class Cards(object):
         self.hint = False
         self.end_of_game = False
         self.indices_of_extra_cards = []
-
 
     def new_game(self):
         self.deck = Deck().new_shuffled_deck()
@@ -50,7 +47,6 @@ class Cards(object):
         self.indices_of_extra_cards = []
         self.correct_set_call = True
 
-
     def open_extra_cards(self):
         """
         Inserts three cards into the open cards, such that the current lay-out
@@ -59,7 +55,6 @@ class Cards(object):
         self.indices_of_extra_cards = self._find_indices_of_extra_cards()
         for i in self.indices_of_extra_cards:
             self.cards_open.insert(i, self._take_n_cards(1)[0])
-
 
     def check_for_set(self):
         """
@@ -71,7 +66,6 @@ class Cards(object):
         for combo in combinations(self.cards_open, 3):
             if self._validate_set(combo):
                 self.hint = combo[0]
-
 
     def process_selection(self, selected_ids):
         """
@@ -87,7 +81,6 @@ class Cards(object):
         else:
             self.correct_set_call = False
 
-
     def _selected_cards(self, selected_ids):
         """Figure out which cards have been selected."""
         result = []
@@ -96,7 +89,6 @@ class Cards(object):
                 if card['id'] == int(card_id):
                     result.append(card)
         return result
-
 
     def _handle_found_set(self, ids_of_cards):
         """
@@ -124,7 +116,6 @@ class Cards(object):
         if extra_cards_open:
             self._handle_extra_open_cards(extra_cards, to_replace)
 
-
     def _handle_extra_open_cards(self, extra_cards, to_replace):
         # Copy extra cards to the positions where cards need to be replaced
         # Note, the extra cards are not part of the set, those cards are
@@ -138,23 +129,20 @@ class Cards(object):
             del self.cards_open[i]
         self.indices_of_extra_cards = []
 
-
     def _take_n_cards(self, n):
         """Draws n cards from the deck."""
         drawn_cards = []
         for i in range(n):
             try:
                 drawn_cards.append(self.deck.pop())
-            except:
+            except IndexError:
                 drawn_cards.append({'blank': 'blank', 'id': '_'})
         return drawn_cards
-
 
     def _find_indices_of_extra_cards(self):
         """Determines which indices extra cards should get."""
         nr_cards_per_row = int(len(self.cards_open)/3)
         return [(i + 1) * nr_cards_per_row + i for i in range(3)]
-
 
     def _validate_set(self, combo):
         """Determines if a combination of three cards is a set."""
@@ -177,6 +165,3 @@ class Cards(object):
             if len(uniq) == 2:
                 return False
         return True
-
-
-

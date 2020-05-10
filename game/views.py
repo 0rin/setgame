@@ -7,11 +7,12 @@ import random
 
 cards = Cards()
 
+
 def game(request):
     if request.method == 'POST' or not cards.cards_open:
         try:
             req = request.POST['req']
-        except:
+        except KeyError:
             req = 'new_game'
         if req == 'new_game':
             cards.new_game()
