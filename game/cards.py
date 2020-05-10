@@ -32,7 +32,7 @@ class Cards(object):
         self.deck = Deck().new_shuffled_deck()
         self.number_sets_found = 0
         self.cards_open = []
-        self.a_set = False
+        self.hint = False
         self.end_of_game = False
         self.indices_of_extra_cards = []
 
@@ -75,9 +75,10 @@ class Cards(object):
         self.cards_open = self._take_n_cards(12)
         # self.cards_open = self.setless
         # self.cards_open = self.cards_18
-        self.a_set = False
+        self.hint = False
         self.end_of_game = False
         self.indices_of_extra_cards = []
+        self.correct_set_call = True
 
 
     def open_extra_cards(self):
@@ -92,29 +93,53 @@ class Cards(object):
 
     def check_for_set(self):
         """
-        Checks if there is a set in the current open cards.
+        Determines if there is a set in the current open cards.
         Sets the 'a_set' property of this class to the id of the first card of
         a set.
         """
+        self.correct_set_call = True
         for combo in combinations(self.cards_open, 3):
             if self._validate_set(combo):
-                self.a_set = combo[0]
+                self.hint = combo[0]
 
 
-    def handle_found_set(self, set_found):
+    def process_selection(self, selected_ids):
+        """
+        Processes the selected combination of cards. Either they form a set, or
+        they don't. Determines the current case and handles it.
+        """
+        selected_ids = selected_ids.split(',')
+        selected_cards = self._selected_cards(selected_ids)
+        if self._validate_set(selected_cards):
+            self.number_sets_found += 1
+            self.correct_set_call = True
+            self._handle_found_set(selected_ids)
+        else:
+            self.correct_set_call = False
+
+
+    def _selected_cards(self, selected_ids):
+        """Figure out which cards have been selected."""
+        result = []
+        for card in self.cards_open:
+            for card_id in selected_ids:
+                if card['id'] == int(card_id):
+                    result.append(card)
+        return result
+
+
+    def _handle_found_set(self, ids_of_cards):
         """
         Handles the correct procedure after a set was found. Either replaces
         the cards from the set with new cards, or with the extra cards that
         were previously laid down.
         """
         extra_cards_open = len(self.cards_open) > 12
-        self.number_sets_found += 1
-        cards_in_set = set_found.split(',')
         to_replace = []
         extra_cards = self.indices_of_extra_cards
 
         for i, card in enumerate(self.cards_open):
-            for j, set_card_id in enumerate(cards_in_set):
+            for j, set_card_id in enumerate(ids_of_cards):
                 if card['id'] == int(set_card_id):
                     if extra_cards_open and i in extra_cards:
                         # Remove from extra cards
@@ -124,7 +149,7 @@ class Cards(object):
                         to_replace.append(i)
                     else:
                         self.cards_open[i] = self._take_n_cards(1)[0]
-                    del cards_in_set[j]
+                    del ids_of_cards[j]
 
         if extra_cards_open:
             self._handle_extra_open_cards(extra_cards, to_replace)

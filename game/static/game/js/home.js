@@ -1,64 +1,43 @@
-var selected_cards = [];
-var colors = []
-var numbers = []
-var shadings = []
-var shapes = []
+var selected_ids = [];
 
 function cardClicked(card_id, color, number, shading, shape) {
     var this_card = document.getElementById(card_id);
-    if (selected_cards.includes(card_id)) {
+    if (selected_ids.includes(card_id)) {
         this_card.style.background = 'white';
-        var card_index = selected_cards.indexOf(card_id);
-        removeFromArrays(card_index, color, number, shading, shape);
+        var card_index = selected_ids.indexOf(card_id);
+        selected_ids.splice(card_index, 1);
     }
     else {
         this_card.style.background = 'grey';
-        addToArrays(card_id, color, number, shading, shape);
-        if (selected_cards.length == 3) {
-            validateSet(selected_cards, [colors, numbers, shadings, shapes]);
-            selected_cards.forEach(card => {
+        selected_ids.push(card_id);
+        if (selected_ids.length == 3) {
+            submitSelectedCards(selected_ids);
+            selected_ids.forEach(card => {
                 document.getElementById(card).style.background = 'white';
             });
-            resetArrays();
+            selected_ids = [];
         }
     }
 }
 
-function validateSet(selected_cards, properties) {
-    for (i = 0; i < properties.length; i++) {
-        uniq = [...new Set(properties[i])];
-        if (uniq.length == 2) {
-            alert('Sorry, this was not a set.');
-            return
-        }
-    };
+function submitSelectedCards(selected_ids) {
     var last_clicked_card =
-        document.getElementById(selected_cards[selected_cards.length - 1])
-    last_clicked_card.value = selected_cards;
+        document.getElementById(selected_ids[selected_ids.length - 1])
+    last_clicked_card.value = selected_ids;
     last_clicked_card.type = "submit";
 }
 
-function addToArrays(card_id, color, number, shading, shape) {
-    selected_cards.push(card_id);
-    colors.push(color);
-    numbers.push(number);
-    shadings.push(shading);
-    shapes.push(shape);
+function confirmSetExistence(card_id) {
+    if (confirm('There is a set. Want a hint?')) {
+        document.getElementById(card_id).style.background = "lightGrey";
+    }
 }
 
-function removeFromArrays(card_index, color, number, shading, shape) {
-    selected_cards.splice(card_index, 1);
-    colors.splice(card_index, 1);
-    numbers.splice(card_index, 1);
-    shadings.splice(card_index, 1);
-    shapes.splice(card_index, 1);
+function endOfGame() {
+    alert('End of game. There is no set, and there are no cards left.');
 }
 
-function resetArrays() {
-    selected_cards = [];
-    colors = [];
-    numbers = [];
-    shadings = [];
-    shapes = [];
+function incorrectSet() {
+    alert('That is not a set.');
 }
 

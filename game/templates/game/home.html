@@ -17,7 +17,7 @@
         {% if forloop.counter0|divisibleby:row_length %}
             <div class="row">
         {% endif %}
-        <form action="{% url 'new_game' %}" method="POST" id="cardForm">
+        <form action="{% url 'game' %}" method="POST" id="cardForm">
             {% csrf_token %}
             <button type="button"
                 class="card_outline {{ card.blank }}"
@@ -77,37 +77,25 @@
         <p class="button" id="sets_found">
             sets found:{{ number_sets_found }}
         </p>
-        <form action="{% url 'new_game' %}" method="POST" id="another_game">
+        <form action="{% url 'game' %}" method="POST" id="another_game">
             {% csrf_token %}
             <button class="button" id="new_game" type="submit" name="req"
                 value="new_game">
                 New Game
             </button>
         </form>
-        <form action="{% url 'new_game' %}" method="POST">
+        <form action="{% url 'game' %}" method="POST">
             {% csrf_token %}
             <button class="button" id="check_set" type="submit" name="req"
                 value="check_set">
                 Set?
             </button>
         </form>
-        {% if a_set %}
-            <script type="text/javascript">
-                (function () {
-                    if (confirm('There is a set. Want a hint?')) {
-                        document.getElementById('{{ a_set.id }}')
-                            .style.background = "lightGrey"
-                    }
-                } ());
-            </script>
-        {% endif %}
-        {% if end_of_game %}
-            <script type="text/javascript">
-                (function () {
-                    alert('End of game. There is no set, and there are no cards left.')
-                } ());
-            </script>
-        {% endif %}
+        <script type="text/javascript">
+            {% if a_set %}confirmSetExistence('{{ a_set.id }}');{% endif %}
+            {% if end_of_game %}endOfGame();{% endif %}
+            {% if not correct_set_call %}incorrectSet();{% endif %}
+        </script>
     </div>
     </div>
   </body>
