@@ -72,8 +72,8 @@ class Cards(object):
     def new_game(self):
         self.deck = Deck().new_shuffled_deck()
         self.number_sets_found = 0
-        self.cards_open = self._take_n_cards(12)
-        # self.cards_open = self.setless
+        # self.cards_open = self._take_n_cards(12)
+        self.cards_open = self.setless
         # self.cards_open = self.cards_18
         self.a_set = False
         self.end_of_game = False
@@ -93,19 +93,11 @@ class Cards(object):
     def check_for_set(self):
         """
         Checks if there is a set in the current open cards.
-        Returns the first card of a set, or false.
+        Sets the 'a_set' property of this class to the id of the first card of
+        a set.
         """
         for combo in combinations(self.cards_open, 3):
-            blank = False
-            for card in combo:
-                # Check if there is a blank card in the combo
-                if card['blank']:
-                    blank = True
-                    break
-            # Skip validation of set if combo contains a blank card
-            if blank:
-                continue
-            elif self._validate_set(combo):
+            if self._validate_set(combo):
                 self.a_set = combo[0]
 
 
@@ -164,26 +156,27 @@ class Cards(object):
 
 
     def _find_indices_of_extra_cards(self):
-        result = []
+        """Determines which indices extra cards should get."""
         nr_cards_per_row = int(len(self.cards_open)/3)
-        for i in range(3):
-            result.append((i + 1) * nr_cards_per_row + i)
-        return result
+        return [(i + 1) * nr_cards_per_row + i for i in range(3)]
 
 
     def _validate_set(self, combo):
+        """Determines if a combination of three cards is a set."""
         colors = []
         numbers = []
         shadings = []
         shapes = []
 
         for card in combo:
+            if card['blank']:
+                return False
             colors.append(card['color'])
             numbers.append(card['number'])
             shadings.append(card['shading'])
             shapes.append(card['shape'])
-        properties = [colors, numbers, shadings, shapes]
 
+        properties = [colors, numbers, shadings, shapes]
         for prop in properties:
             uniq = list(dict.fromkeys(prop))
             if len(uniq) == 2:
