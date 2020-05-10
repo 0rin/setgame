@@ -72,8 +72,8 @@ class Cards(object):
     def new_game(self):
         self.deck = Deck().new_shuffled_deck()
         self.number_sets_found = 0
-        # self.cards_open = self._take_n_cards(12)
-        self.cards_open = self.setless
+        self.cards_open = self._take_n_cards(12)
+        # self.cards_open = self.setless
         # self.cards_open = self.cards_18
         self.a_set = False
         self.end_of_game = False

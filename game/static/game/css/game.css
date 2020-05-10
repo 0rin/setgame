@@ -1,20 +1,44 @@
+#everything {
+  display: table-row;
+}
+
+#control_panel {
+  display: table-cell;
+  float: left;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 30px;
+}
+
+#cards_field {
+  display: table-cell;
+  float: center;
+}
+
 .button {
   border: none;
   color: white;
-  padding: 15px 32px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 #new_game {
-  background-color: #4CAF50; /* Green */
+  padding: 15px 25px;
+  background-color: ForestGreen;
   float: left;
 }
 
 #check_set {
-  background-color: orange;
+  padding: 15px 54px;
+  background-color: darkorange;
+}
+
+#sets_found {
+  padding: 15px 24px;
+  color: black;
+  background-color: LightSteelBlue;
 }
 
 .svg_element {
@@ -79,6 +103,7 @@
 }
 
 .card_outline {
+    white-space: initial;
     border: 2px solid black;
     border-radius: 25px;
     width: 200px;
