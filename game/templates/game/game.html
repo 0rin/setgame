@@ -1,0 +1,83 @@
+{% extends 'game/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<div id="cards_field">
+{% for card in cards_open %}
+    {% if forloop.counter0|divisibleby:row_length %}
+        <div class="row">
+    {% endif %}
+    <form action="{% url 'game' %}" method="POST" id="cardForm">
+        {% csrf_token %}
+        <button type="button"
+            class="card_outline {{ card.blank }}"
+            id="{{ card.id }}"
+            name="req"
+            value="card_clicked"
+            onclick="cardClicked(this.id)">
+            {% for n in card.range %}
+            <svg class="svg_element" width="200" height="60"
+                viewBox="0 0 1400 700">
+                <defs>
+                    <linearGradient
+                        gradientUnits="objectBoundingBox"
+                        id="stripes_{{ card.color }}"
+                        spreadMethod="repeat"
+                        x1="0%" x2="10%" y1="0%" y2="10%"
+                        gradientTransform="rotate(-45) scale(0.3)">
+                        <stop offset="0.2"
+                            stop-color="{{ card.color }}"
+                            stop-opacity="1"/>
+                            <stop offset="0"
+                            stop-color="white"
+                            stop-opacity="1"/>
+                    </linearGradient>
+                </defs>
+                {% if card.shape == 'oval' %}
+                    <ellipse class="{{ card.shape }} {{ card.color }}
+                    {{ card.shading }} {{ card.color }}_{{ card.shading }}"
+                    cx="655.998" cy="385.524" rx="642.153" ry="192.539"/>
+                {% elif card.shape == 'diamond' %}
+                    <path class="{{ card.shape }} {{ card.color }}
+                    {{ card.shading}} {{ card.color }}_{{ card.shading }}"
+                    d="M0,-4l-4,4l4,4l4,-4z"
+                    transform="matrix(160, 0, 0, 53, 660, 397.02)"/>
+                {% elif card.shape == 'rectangle' %}
+                <rect class="{{ card.shape }} {{ card.color }}
+                    {{ card.shading}} {{ card.color }}_{{ card.shading }}"
+                    x="60" y="130" width="1200" height="350"/>
+                {% endif %}
+            </svg>
+            {% endfor %}
+        </button>
+    </form>
+    <div class="column_space"></div>
+    {% if forloop.counter|divisibleby:row_length %}
+        </div>
+    {% endif %}
+{% endfor %}
+</div>
+{% endblock %}
+{% block buttons_content %}
+    <form action="{% url 'game' %}" method="POST">
+        {% csrf_token %}
+        <button class="button" id="check_set" type="submit" name="req"
+            value="check_set">
+            Set?
+        </button>
+    </form>
+    <form action="{% url 'results' %}" method="POST">
+        {% csrf_token %}
+        <button class="button" id="results" type="submit" name="req"
+            value="check_set">
+            Results
+        </button>
+    </form>
+    <script type="text/javascript">
+        {% if a_set %}confirmSetExistence('{{ a_set.id }}');{% endif %}
+        {% if end_of_game %}endOfGame();{% endif %}
+        {% if not correct_set_call %}incorrectSet();{% endif %}
+    </script>
+{% endblock %}
+
+

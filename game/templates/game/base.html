@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+<!-- Comments like this -->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Set Game</title>
+      <!-- Core Stylesheet -->
+  <link rel="stylesheet" href="{% static '/game/css/game.css' %}">
+  <script src="{% static '/game/js/game.js' %}"></script>
+  </head>
+  <body>
+    <div id="everything">
+        {% block main_content %}
+        {% endblock %}
+    <div id="control_panel">
+        <p class="button" id="sets_found">
+            sets found:{{ number_sets_found }}
+        </p>
+        <form action="{% url 'game' %}" method="POST" id="another_game">
+            {% csrf_token %}
+            <button class="button" id="new_game" type="submit" name="req"
+                value="new_game">
+                New Game
+            </button>
+        </form>
+        {% block buttons_content %}
+        {% endblock %}
+    </div>
+    </div>
+  </body>
+</html>

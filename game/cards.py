@@ -1,5 +1,6 @@
 import random
 from itertools import combinations
+from datetime import datetime
 
 
 class Deck(object):
@@ -31,12 +32,7 @@ class Cards(object):
     """
 
     def __init__(self):
-        self.deck = Deck().new_shuffled_deck()
-        self.number_sets_found = 0
-        self.cards_open = []
-        self.hint = False
-        self.end_of_game = False
-        self.indices_of_extra_cards = []
+        self.new_game()
 
     def new_game(self):
         self.deck = Deck().new_shuffled_deck()
@@ -46,6 +42,8 @@ class Cards(object):
         self.end_of_game = False
         self.indices_of_extra_cards = []
         self.correct_set_call = True
+        self.results = []
+        self.start_time = datetime.now()
 
     def open_extra_cards(self):
         """
@@ -63,6 +61,7 @@ class Cards(object):
         a set.
         """
         self.correct_set_call = True
+
         for combo in combinations(self.cards_open, 3):
             if self._validate_set(combo):
                 self.hint = combo[0]
@@ -76,10 +75,15 @@ class Cards(object):
         selected_cards = self._selected_cards(selected_ids)
         if self._validate_set(selected_cards):
             self.number_sets_found += 1
+            duration = (datetime.now() - self.start_time).total_seconds
+            result = {'set': selected_cards[:],
+                      'time': duration}
+            self.results.append(result)
             self.correct_set_call = True
             self._handle_found_set(selected_cards)
         else:
             self.correct_set_call = False
+        self.start_time = datetime.now()
 
     def _selected_cards(self, selected_ids):
         """Figure out which cards have been selected."""
@@ -114,6 +118,8 @@ class Cards(object):
 
         if extra_cards_open:
             self._handle_extra_open_cards(extra_cards, to_replace)
+
+
 
     def _handle_extra_open_cards(self, extra_cards, to_replace):
         # Copy extra cards to the positions where cards need to be replaced.

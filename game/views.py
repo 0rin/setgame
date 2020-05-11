@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -23,6 +23,11 @@ def game(request):
                     cards.open_extra_cards()
                 else:
                     cards.end_of_game = True
+        elif req == 'results' or cards.end_of_game:
+            return redirect(results)
+        elif req == 'back_to_game':
+            cards.hint = False
+            pass
         else:
             cards.end_of_game = False
             cards.hint = False
@@ -34,4 +39,8 @@ def game(request):
                'end_of_game': cards.end_of_game,
                'row_length': len(cards.cards_open)/3,
                'correct_set_call': cards.correct_set_call}
-    return render(request, 'game/home.html', context)
+    return render(request, 'game/game.html', context)
+
+def results(request):
+    cards.end_of_game = False
+    return render(request, 'game/results.html', {'results': cards.results})
