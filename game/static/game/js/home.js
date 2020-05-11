@@ -1,6 +1,6 @@
 var selected_ids = [];
 
-function cardClicked(card_id, color, number, shading, shape) {
+function cardClicked(card_id) {
     var this_card = document.getElementById(card_id);
     if (selected_ids.includes(card_id)) {
         this_card.style.background = 'white';

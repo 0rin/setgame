@@ -26,8 +26,8 @@ class Deck(object):
 class Cards(object):
     """
     This class takes care of all the handling of cards. Like distributing
-    (possibly extra) cards and validating sets. Also takes care of keeping the
-    positions of the open cards.
+    (possibly extra) cards and validating sets. Also takes care of preserving
+    the positions of the open cards.
     """
 
     def __init__(self):
@@ -77,7 +77,7 @@ class Cards(object):
         if self._validate_set(selected_cards):
             self.number_sets_found += 1
             self.correct_set_call = True
-            self._handle_found_set(selected_ids)
+            self._handle_found_set(selected_cards)
         else:
             self.correct_set_call = False
 
@@ -90,7 +90,7 @@ class Cards(object):
                     result.append(card)
         return result
 
-    def _handle_found_set(self, ids_of_cards):
+    def _handle_found_set(self, selected_cards):
         """
         Handles the correct procedure after a set was found. Either replaces
         the cards from the set with new cards, or with the extra cards that
@@ -99,10 +99,9 @@ class Cards(object):
         extra_cards_open = len(self.cards_open) > 12
         to_replace = []
         extra_cards = self.indices_of_extra_cards
-
         for i, card in enumerate(self.cards_open):
-            for j, set_card_id in enumerate(ids_of_cards):
-                if card['id'] == int(set_card_id):
+            for j, set_card in enumerate(selected_cards):
+                if card['id'] == set_card['id']:
                     if extra_cards_open and i in extra_cards:
                         # Remove from extra cards
                         extra_cards = list(set(extra_cards) - set([i]))
@@ -111,13 +110,13 @@ class Cards(object):
                         to_replace.append(i)
                     else:
                         self.cards_open[i] = self._take_n_cards(1)[0]
-                    del ids_of_cards[j]
+                    del selected_cards[j]
 
         if extra_cards_open:
             self._handle_extra_open_cards(extra_cards, to_replace)
 
     def _handle_extra_open_cards(self, extra_cards, to_replace):
-        # Copy extra cards to the positions where cards need to be replaced
+        # Copy extra cards to the positions where cards need to be replaced.
         # Note, the extra cards are not part of the set, those cards are
         # already removed.
         for index in to_replace:

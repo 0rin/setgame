@@ -24,12 +24,7 @@
                 id="{{ card.id }}"
                 name="req"
                 value="card_clicked"
-                onclick="cardClicked(this.id,
-                                    '{{ card.color }}',
-                                    '{{ card.number }}',
-                                    '{{ card.shading }}',
-                                    '{{ card.shape }}'
-                                    )">
+                onclick="cardClicked(this.id)">
         {% for n in card.range %}
             <svg class="svg_element"
                 width="200" height="60"
