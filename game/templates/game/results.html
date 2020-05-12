@@ -3,9 +3,55 @@
 
 {% block main_content %}
 <div id="results_section">
-    <h1>Results page</h1>
+    <h1>Results</h1>
     {% for result in results %}
         <h2>Set {{ forloop.counter }} - Time: {{ result.time }} seconds</h2>
+        {% for card in result.set %}
+        <div type="button"
+            class="card_outline card_outline_small {{ card.blank }}"
+            id="{{ card.id }}">
+            {% for n in card.range %}
+            <svg class="svg_element_small
+                nr_{{ card.number }}_{{ forloop.counter }}"
+                width="55" height="25"
+                viewBox="0 0 1400 700">
+                <defs>
+                    <linearGradient
+                        gradientUnits="objectBoundingBox"
+                        id="stripes_{{ card.color }}"
+                        spreadMethod="repeat"
+                        x1="0%" x2="10%" y1="0%" y2="10%"
+                        gradientTransform="rotate(-45) scale(0.3)">
+                        <stop offset="0.2"
+                            stop-color="{{ card.color }}"
+                            stop-opacity="1"/>
+                            <stop offset="0"
+                            stop-color="white"
+                            stop-opacity="1"/>
+                    </linearGradient>
+                </defs>
+                {% if card.shape == 'oval' %}
+                    <ellipse class="{{ card.shape }} {{ card.color }}
+                    {{ card.shading }} {{ card.color }}_{{ card.shading }}"
+                    cx="655.998" cy="385.524" rx="642.153" ry="192.539"/>
+                {% elif card.shape == 'diamond' %}
+                    <path class="{{ card.shape }}_small {{ card.color }}
+                    {{ card.shading}} {{ card.color }}_{{ card.shading }}"
+                    d="M0,-4l-4,4l4,4l4,-4z"
+                    transform="matrix(160, 0, 0, 53, 660, 397.02)"/>
+                {% elif card.shape == 'rectangle' %}
+                <rect class="{{ card.shape }} {{ card.color }}
+                    {{ card.shading}} {{ card.color }}_{{ card.shading }}"
+                    x="60" y="130" width="1200" height="350"/>
+                {% endif %}
+            </svg>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+
+
+        <br/>
         {% for card in result.set %}
             {{ card.color }} {{ card.number }} {{ card.shading }} {{ card.shape}}
             <br/>

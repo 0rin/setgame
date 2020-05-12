@@ -11,7 +11,7 @@ function cardClicked(card_id) {
         this_card.style.background = 'grey';
         selected_ids.push(card_id);
         if (selected_ids.length == 3) {
-            submitSelectedCards(selected_ids);
+            submitSelectedCards();
             selected_ids.forEach(card => {
                 document.getElementById(card).style.background = 'white';
             });
@@ -20,7 +20,7 @@ function cardClicked(card_id) {
     }
 }
 
-function submitSelectedCards(selected_ids) {
+function submitSelectedCards() {
     var last_clicked_card =
         document.getElementById(selected_ids[selected_ids.length - 1])
     last_clicked_card.value = selected_ids;

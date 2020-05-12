@@ -120,6 +120,11 @@
     stroke-width: 3px;
 }
 
+.diamond_small {
+    vector-effect: non-scaling-stroke;
+    stroke-width: 1px;
+}
+
 .rectangle {
     stroke-width: 30px;
 }
@@ -137,6 +142,13 @@
     display: table-cell;
 }
 
+.card_outline_small {
+    border-radius: 15px;
+    width: 75px;
+    height: 110px;
+    position: relative;
+}
+
 .blank {
     display: none;
 }
@@ -146,4 +158,36 @@
     width: 10px;
 }
 
+.nr_1_1 {
+  top: 40px;
+  left: 10px;
+}
 
+.nr_2_1 {
+  top: 28px;
+  left: 10px;
+}
+
+.nr_2_2 {
+  top: 52px;
+  left: 10px;
+}
+
+.nr_3_1 {
+  top: 18px;
+  left: 10px;
+}
+
+.nr_3_2 {
+  top: 40px;
+  left: 10px;
+}
+
+.nr_3_3 {
+  top: 62px;
+  left: 10px;
+}
+
+.svg_element_small {
+  position: absolute;
+}
