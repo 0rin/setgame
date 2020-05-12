@@ -77,8 +77,8 @@ class Cards(object):
         self.deck = Deck().new_shuffled_deck()
         self.end_of_game = False
         self.number_sets_found = 0
-        # self.cards_open = self._take_n_cards(12)
-        self.cards_open = self.setless[:] + self.setless_extra[:]
+        self.cards_open = self._take_n_cards(12)
+        # self.cards_open = self.setless[:] + self.setless_extra[:]
         self.hint = False
         self.correct_set_call = True
         self.results = []
@@ -164,9 +164,6 @@ class Cards(object):
         # Copy extra cards to the positions where cards need to be replaced.
         # Note, the extra cards are not part of the set, those cards are
         # already removed.
-        print('_move_extra_cards')
-        print('indices_extra_cards', indices_extra_cards)
-        print('to_replace', to_replace)
         for index in to_replace:
 
             self.cards_open[index] = self.cards_open[indices_extra_cards[-1]]
@@ -185,8 +182,11 @@ class Cards(object):
 
     def _indices_extra_cards(self, nr_cards):
         """Determines which indices extra cards have."""
-        nr_cards_per_row = int(nr_cards / 3)
-        return [(i + 1) * (nr_cards_per_row - 1) + i for i in range(3)]
+        if nr_cards > 12:
+            nr_cards_per_row = int(nr_cards / 3)
+            return [(i + 1) * (nr_cards_per_row - 1) + i for i in range(3)]
+        else:
+            return []
 
 
     def _validate_set(self, combo):
