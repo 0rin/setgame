@@ -16,6 +16,11 @@ class Deck(object):
     for i in range(len(original_deck)):
         original_deck[i]['id'] = i
         original_deck[i]['blank'] = False
+        # print(original_deck[i]['color'],
+        #       original_deck[i]['shading'],
+        #       original_deck[i]['number'],
+        #       original_deck[i]['shape'],
+        #       original_deck[i]['id'])
 
     def new_shuffled_deck(self):
         """Gives a new, shuffled deck."""
@@ -34,13 +39,47 @@ class Cards(object):
     def __init__(self):
         self.new_game()
 
+    setless = [
+        {'color': 'green', 'shading': 'open', 'range': range(0, 2),
+         'number': 2, 'shape': 'oval', 'id': 42, 'blank': False},
+        {'color': 'blue', 'shading': 'open', 'range': range(0, 3),
+         'number': 3, 'shape': 'oval', 'id': 78, 'blank': False},
+        {'color': 'blue', 'shading': 'open', 'range': range(0, 1),
+         'number': 1, 'shape': 'oval', 'id': 60, 'blank': False},
+        {'color': 'red', 'shading': 'striped', 'range': range(0, 1),
+         'number': 1, 'shape': 'rectangle', 'id': 5, 'blank': False},
+        {'color': 'red', 'shading': 'striped', 'range': range(0, 3),
+         'number': 3, 'shape': 'oval', 'id': 21, 'blank': False},
+        {'color': 'blue', 'shading': 'solid', 'range': range(0, 3),
+         'number': 3, 'shape': 'oval', 'id': 72, 'blank': False},
+        {'color': 'green', 'shading': 'solid', 'range': range(0, 1),
+         'number': 1, 'shape': 'oval', 'id': 27, 'blank': False},
+        {'color': 'blue', 'shading': 'open', 'range': range(0, 3),
+         'number': 3, 'shape': 'rectangle', 'id': 80, 'blank': False},
+        {'color': 'red', 'shading': 'solid', 'range': range(0, 3),
+         'number': 3, 'shape': 'oval', 'id': 18, 'blank': False},
+        {'color': 'green', 'shading': 'open', 'range': range(0, 3),
+         'number': 3, 'shape': 'diamond', 'id': 52, 'blank': False},
+        {'color': 'green', 'shading': 'striped', 'range': range(0, 3),
+         'number': 3, 'shape': 'rectangle', 'id': 50, 'blank': False},
+        {'color': 'red', 'shading': 'solid', 'range': range(0, 2),
+         'number': 2, 'shape': 'rectangle', 'id': 11, 'blank': False}]
+
+    setless_extra = [
+        {'color': 'blue', 'shading': 'solid', 'range': range(0, 1),
+         'number': 1, 'shape': 'diamond', 'id': 55, 'blank': False},
+        {'color': 'red', 'shading': 'striped', 'range': range(0, 1),
+         'number': 1, 'shape': 'diamond', 'id': 4, 'blank': False},
+        {'color': 'green', 'shading': 'solid', 'range': range(0, 3),
+         'number': 3, 'shape': 'rectangle', 'id': 47, 'blank': False}]
+
     def new_game(self):
         self.deck = Deck().new_shuffled_deck()
         self.end_of_game = False
         self.number_sets_found = 0
-        self.cards_open = self._take_n_cards(12)
+        # self.cards_open = self._take_n_cards(12)
+        self.cards_open = self.setless[:] + self.setless_extra[:]
         self.hint = False
-        self.indices_of_extra_cards = []
         self.correct_set_call = True
         self.results = []
         self.start_time = datetime.now()
@@ -50,8 +89,10 @@ class Cards(object):
         Inserts three cards into the open cards, such that the current lay-out
         does not change.
         """
-        self.indices_of_extra_cards = self._find_indices_of_extra_cards()
-        for i in self.indices_of_extra_cards:
+        nr_cards_per_row = int(len(self.cards_open)/3)
+        indices_for_extra_cards =
+        [(i + 1) * nr_cards_per_row + i for i in range(3)]
+        for i in indices_for_extra_cards:
             self.cards_open.insert(i, self._take_n_cards(1)[0])
 
     def check_for_set(self):
@@ -61,7 +102,6 @@ class Cards(object):
         a set.
         """
         self.correct_set_call = True
-
         for combo in combinations(self.cards_open, 3):
             if self._validate_set(combo):
                 self.hint = combo[0]
@@ -100,40 +140,38 @@ class Cards(object):
         the cards from the set with new cards, or with the extra cards that
         were previously laid down.
         """
-        extra_cards_open = len(self.cards_open) > 12
         to_replace = []
-        extra_cards = self.indices_of_extra_cards
+        to_remove = []
+        extra_cards = self._indices_extra_cards(len(self.cards_open))
         for i, card in enumerate(self.cards_open):
             for j, set_card in enumerate(selected_cards):
                 if card['id'] == set_card['id']:
-                    if extra_cards_open and i in extra_cards:
-                        # Remove from extra cards
-                        extra_cards = list(set(extra_cards) - set([i]))
-                    elif extra_cards_open:
+                    if i in extra_cards:
+                        to_remove.append(i)
+                        extra_cards.remove(i)
+                    elif extra_cards:
                         # This one should be replaced by one of the extra cards
                         to_replace.append(i)
                     else:
                         self.cards_open[i] = self._take_n_cards(1)[0]
                     del selected_cards[j]
-        if extra_cards_open:
-            self._handle_extra_open_cards(extra_cards, to_replace)
-        else:
-            blanks = (card['blank'] for card in self.cards_open)
-            if all(blanks):
-                self.end_of_game = True
+        if extra_cards:
+            self._handle_extra_cards(extra_cards, to_replace, to_remove)
+        blanks = (card['blank'] for card in self.cards_open)
+        if all(blanks):
+            self.end_of_game = True
 
-    def _handle_extra_open_cards(self, extra_cards, to_replace):
+    def _handle_extra_cards(self, extra_cards, to_replace, to_remove):
         # Copy extra cards to the positions where cards need to be replaced.
         # Note, the extra cards are not part of the set, those cards are
         # already removed.
         for index in to_replace:
             self.cards_open[index] = self.cards_open[extra_cards[-1]]
+            to_remove.append(extra_cards[-1])
             del extra_cards[-1]
-        # Remove all the extra cards
-        self.indices_of_extra_cards.reverse()
-        for i in self.indices_of_extra_cards:
-            del self.cards_open[i]
-        del self.indices_of_extra_cards[:3]
+        to_remove.sort(reverse=True)
+        for index in to_remove:
+            del self.cards_open[index]
 
     def _take_n_cards(self, n):
         """Draws n cards from the deck."""
@@ -145,10 +183,16 @@ class Cards(object):
                 drawn_cards.append({'blank': 'blank', 'id': '_'})
         return drawn_cards
 
-    def _find_indices_of_extra_cards(self):
-        """Determines which indices extra cards should get."""
-        nr_cards_per_row = int(len(self.cards_open)/3)
-        return [(i + 1) * nr_cards_per_row + i for i in range(3)]
+    def _indices_extra_cards(self, n):
+        """Determines which indices all the extra cards have."""
+        if n == 12:
+            return []
+        elif n == 15:
+            return [14, 9, 4]
+        elif n == 18:
+            return [17, 16, 11, 10, 5, 4]
+        else:
+            return [20, 19, 18, 13, 12, 11, 6, 5, 4]
 
     def _validate_set(self, combo):
         """Determines if a combination of three cards is a set."""

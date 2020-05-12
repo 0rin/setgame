@@ -41,6 +41,7 @@ def game(request):
                'correct_set_call': cards.correct_set_call}
     return render(request, 'game/game.html', context)
 
+
 def results(request):
     context = {'results': cards.results,
                'number_sets_found': cards.number_sets_found,
