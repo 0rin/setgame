@@ -145,17 +145,25 @@ class Cards(object):
             for j, set_card in enumerate(selected_cards):
                 if card['id'] == set_card['id']:
                     if i in indices_extra_cards:
+                        # Extra card and part of set, will be removed later.
                         self.cards_open[i] = None
                         indices_extra_cards.remove(i)
                     elif indices_extra_cards:
-                        # This one should be replaced by one of the extra cards
+                        # This set card is not extra, will be replaced by one
+                        # of the extra cards.
                         to_replace.append(i)
                     else:
+                        # There are no extra cards.
                         self.cards_open[i] = self._take_n_cards(1)[0]
                     del selected_cards[j]
+        # Move extra cards if any.
         if indices_extra_cards:
             self._move_extra_cards(indices_extra_cards, to_replace)
+
+        # Remove the extra cards that were part of the set
         self.cards_open = list(filter(None, self.cards_open))
+
+        # Check if there are still cards left.
         blanks = (card['blank'] for card in self.cards_open)
         if all(blanks):
             self.end_of_game = True
@@ -165,7 +173,6 @@ class Cards(object):
         # Note, the extra cards are not part of the set, those cards are
         # already removed.
         for index in to_replace:
-
             self.cards_open[index] = self.cards_open[indices_extra_cards[-1]]
             del self.cards_open[indices_extra_cards[-1]]
             del indices_extra_cards[-1]
