@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block main_content %}
-<div id="cards_field">
+<div id="playing_section">
 {% for card in cards_open %}
     {% if forloop.counter0|divisibleby:row_length %}
         <div class="row">
@@ -59,6 +59,16 @@
 </div>
 {% endblock %}
 {% block buttons_content %}
+    <p class="button" id="sets_found">
+        sets found:{{ number_sets_found }}
+    </p>
+    <form action="{% url 'game' %}" method="POST" id="another_game">
+        {% csrf_token %}
+        <button class="button" id="new_game" type="submit" name="req"
+            value="new_game">
+            New Game
+        </button>
+    </form>
     <form action="{% url 'game' %}" method="POST">
         {% csrf_token %}
         <button class="button" id="check_set" type="submit" name="req"
@@ -69,7 +79,7 @@
     <form action="{% url 'results' %}" method="POST">
         {% csrf_token %}
         <button class="button" id="results" type="submit" name="req"
-            value="check_set">
+            value="results">
             Results
         </button>
     </form>

@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block main_content %}
-<div class="results_section">
+<div id="results_section">
     <h1>Results page</h1>
     {% for result in results %}
         <h2>Set {{ forloop.counter }} - Time: {{ result.time }} seconds</h2>
@@ -14,11 +14,24 @@
 </div>
 {% endblock %}
 {% block buttons_content %}
-    <form action="{% url 'game' %}" method="POST">
-        {% csrf_token %}
-        <button class="button" id="back_to_game" type="submit" name="req"
-            value="back_to_game">
-            Back to Game
-        </button>
-    </form>
+    <p class="button" id="sets_found">
+        sets found:{{ number_sets_found }}
+    </p>
+    {% if end_of_game %}
+        <form action="{% url 'game' %}" method="POST" id="another_game">
+            {% csrf_token %}
+            <button class="button" id="new_game" type="submit" name="req"
+                value="new_game">
+                New Game
+            </button>
+        </form>
+    {% else %}
+        <form action="{% url 'game' %}" method="POST">
+            {% csrf_token %}
+            <button class="button" id="back_to_game" type="submit" name="req"
+                value="back_to_game">
+                Back to Game
+            </button>
+        </form>
+    {% endif %}
 {% endblock %}

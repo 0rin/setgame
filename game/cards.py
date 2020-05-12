@@ -9,8 +9,8 @@ class Deck(object):
                       'shading': shading,
                       'range': range(number),
                       'number': number,
-                      'shape': shape} for color in ['red', 'green', 'blue']
-                     for number in [1, 2, 3]
+                      'shape': shape} for color in ['red']#, 'green', 'blue']
+                     for number in [1]#, 2, 3]
                      for shading in ['solid', 'striped', 'open']
                      for shape in ['oval', 'diamond', 'rectangle']]
     for i in range(len(original_deck)):
@@ -36,10 +36,10 @@ class Cards(object):
 
     def new_game(self):
         self.deck = Deck().new_shuffled_deck()
+        self.end_of_game = False
         self.number_sets_found = 0
         self.cards_open = self._take_n_cards(12)
         self.hint = False
-        self.end_of_game = False
         self.indices_of_extra_cards = []
         self.correct_set_call = True
         self.results = []
@@ -83,7 +83,7 @@ class Cards(object):
             self._handle_found_set(selected_cards)
         else:
             self.correct_set_call = False
-        self.start_time = datetime.now()
+        self.start_time = datetime.now()  # Reset start time
 
     def _selected_cards(self, selected_ids):
         """Figure out which cards have been selected."""
@@ -115,11 +115,12 @@ class Cards(object):
                     else:
                         self.cards_open[i] = self._take_n_cards(1)[0]
                     del selected_cards[j]
-
         if extra_cards_open:
             self._handle_extra_open_cards(extra_cards, to_replace)
-
-
+        else:
+            blanks = (card['blank'] for card in self.cards_open)
+            if all(blanks):
+                self.end_of_game = True
 
     def _handle_extra_open_cards(self, extra_cards, to_replace):
         # Copy extra cards to the positions where cards need to be replaced.

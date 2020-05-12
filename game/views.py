@@ -42,5 +42,7 @@ def game(request):
     return render(request, 'game/game.html', context)
 
 def results(request):
-    cards.end_of_game = False
-    return render(request, 'game/results.html', {'results': cards.results})
+    context = {'results': cards.results,
+               'number_sets_found': cards.number_sets_found,
+               'end_of_game': cards.end_of_game}
+    return render(request, 'game/results.html', context)
