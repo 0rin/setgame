@@ -89,9 +89,8 @@ class Cards(object):
         Inserts three cards into the open cards, such that the current lay-out
         does not change.
         """
-        nr_cards_per_row = int(len(self.cards_open)/3)
-        indices_for_extra_cards =
-        [(i + 1) * nr_cards_per_row + i for i in range(3)]
+        # Add 3 because it is not the current situation but desired.
+        indices_for_extra_cards = self._indices_extra_cards(len(self.cards_open) + 3)
         for i in indices_for_extra_cards:
             self.cards_open.insert(i, self._take_n_cards(1)[0])
 
@@ -141,37 +140,38 @@ class Cards(object):
         were previously laid down.
         """
         to_replace = []
-        to_remove = []
-        extra_cards = self._indices_extra_cards(len(self.cards_open))
+        indices_extra_cards = self._indices_extra_cards(len(self.cards_open))
         for i, card in enumerate(self.cards_open):
             for j, set_card in enumerate(selected_cards):
                 if card['id'] == set_card['id']:
-                    if i in extra_cards:
-                        to_remove.append(i)
-                        extra_cards.remove(i)
-                    elif extra_cards:
+                    if i in indices_extra_cards:
+                        self.cards_open[i] = None
+                        indices_extra_cards.remove(i)
+                    elif indices_extra_cards:
                         # This one should be replaced by one of the extra cards
                         to_replace.append(i)
                     else:
                         self.cards_open[i] = self._take_n_cards(1)[0]
                     del selected_cards[j]
-        if extra_cards:
-            self._handle_extra_cards(extra_cards, to_replace, to_remove)
+        if indices_extra_cards:
+            self._move_extra_cards(indices_extra_cards, to_replace)
+        self.cards_open = list(filter(None, self.cards_open))
         blanks = (card['blank'] for card in self.cards_open)
         if all(blanks):
             self.end_of_game = True
 
-    def _handle_extra_cards(self, extra_cards, to_replace, to_remove):
+    def _move_extra_cards(self, indices_extra_cards, to_replace):
         # Copy extra cards to the positions where cards need to be replaced.
         # Note, the extra cards are not part of the set, those cards are
         # already removed.
+        print('_move_extra_cards')
+        print('indices_extra_cards', indices_extra_cards)
+        print('to_replace', to_replace)
         for index in to_replace:
-            self.cards_open[index] = self.cards_open[extra_cards[-1]]
-            to_remove.append(extra_cards[-1])
-            del extra_cards[-1]
-        to_remove.sort(reverse=True)
-        for index in to_remove:
-            del self.cards_open[index]
+
+            self.cards_open[index] = self.cards_open[indices_extra_cards[-1]]
+            del self.cards_open[indices_extra_cards[-1]]
+            del indices_extra_cards[-1]
 
     def _take_n_cards(self, n):
         """Draws n cards from the deck."""
@@ -183,16 +183,11 @@ class Cards(object):
                 drawn_cards.append({'blank': 'blank', 'id': '_'})
         return drawn_cards
 
-    def _indices_extra_cards(self, n):
-        """Determines which indices all the extra cards have."""
-        if n == 12:
-            return []
-        elif n == 15:
-            return [14, 9, 4]
-        elif n == 18:
-            return [17, 16, 11, 10, 5, 4]
-        else:
-            return [20, 19, 18, 13, 12, 11, 6, 5, 4]
+    def _indices_extra_cards(self, nr_cards):
+        """Determines which indices extra cards have."""
+        nr_cards_per_row = int(nr_cards / 3)
+        return [(i + 1) * (nr_cards_per_row - 1) + i for i in range(3)]
+
 
     def _validate_set(self, combo):
         """Determines if a combination of three cards is a set."""
