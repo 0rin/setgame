@@ -133,7 +133,7 @@ class Cards(object):
         self.indices_of_extra_cards.reverse()
         for i in self.indices_of_extra_cards:
             del self.cards_open[i]
-        self.indices_of_extra_cards = []
+        del self.indices_of_extra_cards[:3]
 
     def _take_n_cards(self, n):
         """Draws n cards from the deck."""

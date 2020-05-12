@@ -5,10 +5,8 @@
 <div id="results_section">
     <h1>Results</h1>
     {% for result in results %}
-        <h2>Set {{ forloop.counter }} - Time: {{ result.time }} seconds</h2>
         {% for card in result.set %}
-        <div type="button"
-            class="card_outline card_outline_small {{ card.blank }}"
+        <div class="card_outline card_outline_small {{ card.blank }}"
             id="{{ card.id }}">
             {% for n in card.range %}
             <svg class="svg_element_small
@@ -48,14 +46,9 @@
             {% endfor %}
         </div>
         {% endfor %}
-
-
-
+        <div class="bar" style="width:{{result.time}}px;"></div>
+        <div class="time"><h3>{{result.time}} seconds</h3></div>
         <br/>
-        {% for card in result.set %}
-            {{ card.color }} {{ card.number }} {{ card.shading }} {{ card.shape}}
-            <br/>
-        {% endfor %}
     {% endfor %}
 </div>
 {% endblock %}

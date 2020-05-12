@@ -191,3 +191,13 @@
 .svg_element_small {
   position: absolute;
 }
+
+.bar {
+  display: table-cell;
+  background-color: blue;
+}
+
+.time {
+  padding-left: 20px;
+  display: table-cell;
+}
