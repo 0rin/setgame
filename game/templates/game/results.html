@@ -46,15 +46,25 @@
             {% endfor %}
         </div>
         {% endfor %}
-        <div class="bar" style="width:{{result.time}}px;"></div>
-        <div class="time"><h3>{{result.time}} seconds</h3></div>
+        <div class="bar_container">
+            <div class="time">
+                <h3> {{result.time}} seconds
+                    {% if result.hint %}
+                        (With a hint.)
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="bar" style="width:{{result.time}}px;"></div>
+        </div>
         <br/>
     {% endfor %}
 </div>
 {% endblock %}
 {% block buttons_content %}
-    <p class="button" id="sets_found">
-        sets found:{{ number_sets_found }}
+    <p class="button" id="dashboard">
+        Total time: {{ total_time }}<br/>
+        Average time per set: {{ average }}<br/>
+        SETS Found:{{ number_sets_found }}
     </p>
     {% if end_of_game %}
         <form action="{% url 'game' %}" method="POST" id="another_game">

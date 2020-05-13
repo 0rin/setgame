@@ -9,8 +9,8 @@ class Deck(object):
                       'shading': shading,
                       'range': range(number),
                       'number': number,
-                      'shape': shape} for color in ['red', 'green', 'blue']
-                     for number in [1, 2, 3]
+                      'shape': shape} for color in ['red']#, 'green', 'blue']
+                     for number in [1]#, 2, 3]
                      for shading in ['solid', 'striped', 'open']
                      for shape in ['oval', 'diamond', 'rectangle']]
     for i in range(len(original_deck)):
@@ -49,6 +49,8 @@ class Cards(object):
         self.correct_set_call = True
         self.results = []
         self.start_time = datetime.now()
+        self.start_time_game = datetime.now()
+        self.total_time = ' - Game not ended yet - '
 
     def open_extra_cards(self):
         """
@@ -81,9 +83,11 @@ class Cards(object):
         selected_cards = self._selected_cards(selected_ids)
         if self._validate_set(selected_cards):
             self.number_sets_found += 1
-            duration = (datetime.now() - self.start_time).total_seconds
+            duration =\
+                round((datetime.now() - self.start_time).total_seconds(), 2)
             result = {'set': selected_cards[:],
-                      'time': duration}
+                      'time': duration,
+                      'hint': self.hint}
             self.results.append(result)
             self.correct_set_call = True
             self._handle_found_set(selected_cards)
@@ -133,6 +137,8 @@ class Cards(object):
         # Check if there are still cards left.
         blanks = (card['blank'] for card in self.cards_open)
         if all(blanks):
+            self.total_time = round((datetime.now()\
+                - self.start_time_game).total_seconds(), 2)
             self.end_of_game = True
 
     def _move_extra_cards(self, indices_extra_cards, to_replace):

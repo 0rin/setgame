@@ -41,7 +41,7 @@
   background-color: darkorange;
 }
 
-#sets_found {
+#dashboard {
   padding: 15px 24px;
   color: black;
   background-color: LightSteelBlue;
@@ -193,9 +193,15 @@
   left: 10px;
 }
 
-.bar {
+.bar_container {
   display: table-cell;
+  position: relative;
+}
+.bar {
   background-color: blue;
+  position: absolute;
+  height: 20px;
+  left: 16px;
 }
 
 .time {
