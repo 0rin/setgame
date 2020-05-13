@@ -16,8 +16,8 @@
             value="card_clicked"
             onclick="cardClicked(this.id)">
             {% for n in card.range %}
-            <svg class="svg_element" width="200" height="60"
-                viewBox="0 0 1400 700">
+            <svg class="svg_element nr_{{ card.number }}_{{ forloop.counter }}"
+                width="200" height="60" viewBox="0 0 1400 700">
                 <defs>
                     <linearGradient
                         gradientUnits="objectBoundingBox"
@@ -54,6 +54,7 @@
     <div class="column_space"></div>
     {% if forloop.counter|divisibleby:row_length %}
         </div>
+        <div class="row_space"></div>
     {% endif %}
 {% endfor %}
 </div>

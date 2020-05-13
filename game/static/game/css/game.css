@@ -68,7 +68,8 @@
 }
 
 .svg_element {
-    position: relative;
+    position: absolute;
+    left: 6px;
 }
 
 .red {
@@ -140,6 +141,7 @@
     width: 200px;
     height: 300px;
     display: table-cell;
+    position: relative;
 }
 
 .card_outline_small {
@@ -158,38 +160,37 @@
     width: 10px;
 }
 
-.nr_1_1 {
-  top: 40px;
-  left: 10px;
+.row_space {
+  height: 10px;
 }
 
-.nr_2_1 {
+.nr_1_1_small {
+  top: 40px;
+}
+
+.nr_2_1_small {
   top: 28px;
-  left: 10px;
 }
 
-.nr_2_2 {
+.nr_2_2_small {
   top: 52px;
-  left: 10px;
 }
 
-.nr_3_1 {
+.nr_3_1_small {
   top: 18px;
-  left: 10px;
 }
 
-.nr_3_2 {
+.nr_3_2_small {
   top: 40px;
-  left: 10px;
 }
 
-.nr_3_3 {
+.nr_3_3_small {
   top: 62px;
-  left: 10px;
 }
 
 .svg_element_small {
   position: absolute;
+  left: 10px;
 }
 
 .bar {
@@ -200,4 +201,28 @@
 .time {
   padding-left: 20px;
   display: table-cell;
+}
+
+.nr_1_1 {
+  top: 120px;
+}
+
+.nr_2_1 {
+  top: 90px;
+}
+
+.nr_2_2 {
+  top: 140px;
+}
+
+.nr_3_1 {
+  top: 60px;
+}
+
+.nr_3_2 {
+  top: 120px;
+}
+
+.nr_3_3 {
+  top: 180px;
 }
