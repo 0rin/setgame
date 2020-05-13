@@ -39,40 +39,6 @@ class Cards(object):
     def __init__(self):
         self.new_game()
 
-    setless = [
-        {'color': 'green', 'shading': 'open', 'range': range(0, 2),
-         'number': 2, 'shape': 'oval', 'id': 42, 'blank': False},
-        {'color': 'blue', 'shading': 'open', 'range': range(0, 3),
-         'number': 3, 'shape': 'oval', 'id': 78, 'blank': False},
-        {'color': 'blue', 'shading': 'open', 'range': range(0, 1),
-         'number': 1, 'shape': 'oval', 'id': 60, 'blank': False},
-        {'color': 'red', 'shading': 'striped', 'range': range(0, 1),
-         'number': 1, 'shape': 'rectangle', 'id': 5, 'blank': False},
-        {'color': 'red', 'shading': 'striped', 'range': range(0, 3),
-         'number': 3, 'shape': 'oval', 'id': 21, 'blank': False},
-        {'color': 'blue', 'shading': 'solid', 'range': range(0, 3),
-         'number': 3, 'shape': 'oval', 'id': 72, 'blank': False},
-        {'color': 'green', 'shading': 'solid', 'range': range(0, 1),
-         'number': 1, 'shape': 'oval', 'id': 27, 'blank': False},
-        {'color': 'blue', 'shading': 'open', 'range': range(0, 3),
-         'number': 3, 'shape': 'rectangle', 'id': 80, 'blank': False},
-        {'color': 'red', 'shading': 'solid', 'range': range(0, 3),
-         'number': 3, 'shape': 'oval', 'id': 18, 'blank': False},
-        {'color': 'green', 'shading': 'open', 'range': range(0, 3),
-         'number': 3, 'shape': 'diamond', 'id': 52, 'blank': False},
-        {'color': 'green', 'shading': 'striped', 'range': range(0, 3),
-         'number': 3, 'shape': 'rectangle', 'id': 50, 'blank': False},
-        {'color': 'red', 'shading': 'solid', 'range': range(0, 2),
-         'number': 2, 'shape': 'rectangle', 'id': 11, 'blank': False}]
-
-    setless_extra = [
-        {'color': 'blue', 'shading': 'solid', 'range': range(0, 1),
-         'number': 1, 'shape': 'diamond', 'id': 55, 'blank': False},
-        {'color': 'red', 'shading': 'striped', 'range': range(0, 1),
-         'number': 1, 'shape': 'diamond', 'id': 4, 'blank': False},
-        {'color': 'green', 'shading': 'solid', 'range': range(0, 3),
-         'number': 3, 'shape': 'rectangle', 'id': 47, 'blank': False}]
-
     def new_game(self):
         self.deck = Deck().new_shuffled_deck()
         self.end_of_game = False
@@ -90,7 +56,8 @@ class Cards(object):
         does not change.
         """
         # Add 3 because it is not the current situation but desired.
-        indices_for_extra_cards = self._indices_extra_cards(len(self.cards_open) + 3)
+        indices_for_extra_cards =\
+            self._indices_extra_cards(len(self.cards_open) + 3)
         for i in indices_for_extra_cards:
             self.cards_open.insert(i, self._take_n_cards(1)[0])
 
@@ -194,7 +161,6 @@ class Cards(object):
             return [(i + 1) * (nr_cards_per_row - 1) + i for i in range(3)]
         else:
             return []
-
 
     def _validate_set(self, combo):
         """Determines if a combination of three cards is a set."""

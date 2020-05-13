@@ -26,14 +26,17 @@ setless = [
     {'color': 'red', 'shading': 'solid', 'range': range(0, 2),
      'number': 2, 'shape': 'rectangle', 'id': 11, 'blank': False}]
 
+setless_extra = [
+    {'color': 'blue', 'shading': 'solid', 'range': range(0, 1),
+     'number': 1, 'shape': 'diamond', 'id': 55, 'blank': False},
+    {'color': 'red', 'shading': 'striped', 'range': range(0, 1),
+     'number': 1, 'shape': 'diamond', 'id': 4, 'blank': False},
+    {'color': 'green', 'shading': 'solid', 'range': range(0, 3),
+     'number': 3, 'shape': 'rectangle', 'id': 47, 'blank': False}]
+
 with_set = setless[:]
-with_set[-1] = {'color': 'red',
-                'shading': 'open',
-                'range': range(0, 1),
-                'number': 1,
-                'shape': 'oval',
-                'id': 1,
-                'blank': False}
+with_set[-1] = {'color': 'red', 'shading': 'open', 'range': range(0, 1),
+                'number': 1, 'shape': 'oval', 'id': 6, 'blank': False}
 
 
 def test_new_shuffled_deck():
@@ -48,7 +51,6 @@ def test_new_game():
     assert(len(cards.cards_open) == 12)
     assert(not cards.hint)
     assert(not cards.end_of_game)
-    assert(cards.indices_of_extra_cards == [])
     assert(cards.correct_set_call)
 
 
@@ -75,7 +77,25 @@ def test_check_for_set():
 
 def test_process_selection():
     cards = Cards()
-    selection = '[42, 78, 1]'
+    selection = '42,78,1'
     cards.process_selection(selection)
     assert(cards.number_sets_found == 1)
     assert(cards.correct_set_call)
+
+
+def test_indices_extra_cards():
+    cards = Cards()
+    assert(cards._indices_extra_cards(12) == [])
+    assert(cards._indices_extra_cards(15) == [4, 9, 14])
+    assert(cards._indices_extra_cards(18) == [5, 11, 17])
+    assert(cards._indices_extra_cards(21) == [6, 13, 20])
+
+
+def test_handling_extra_cards():
+    cards = Cards()
+    cards.cards_open = setless + setless_extra
+    assert(len(cards.cards_open) == 15)
+    cards.check_for_set()
+    assert(not cards.hint)
+    cards.open_extra_cards()
+    assert(len(cards.cards_open) == 18)
