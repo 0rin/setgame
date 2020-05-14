@@ -76,7 +76,8 @@ def test_check_for_set():
 
 def test_process_selection():
     cards = Cards()
-    selection = '42,78,1'
+    selection = '42,78,6'
+    cards.cards_open = with_set
     cards.process_selection(selection)
     assert(cards.correct_set_call)
     assert(cards.number_sets_found == 1)

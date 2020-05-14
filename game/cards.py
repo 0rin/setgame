@@ -1,4 +1,5 @@
 import random
+import logging
 from itertools import combinations
 from datetime import datetime
 
@@ -30,6 +31,8 @@ class Cards(object):
     (possibly extra) cards and validating sets. Also takes care of preserving
     the positions of the open cards.
     """
+
+    logging.basicConfig(level=logging.DEBUG, filename='game.log')
 
     def __init__(self):
         self.new_game()
@@ -106,27 +109,45 @@ class Cards(object):
         """
         to_replace = []
         indices_extra_cards = self._indices_extra_cards(len(self.cards_open))
+        logging.info('\t-\t-\t-\t-')
+        logging.info('\t-\t-\t-\t-')
+        logging.info('In _handle_found_set()')
+        logging.info('indices_extra_cards: {}'.format(indices_extra_cards))
         for i, card in enumerate(self.cards_open):
-            for j, set_card in enumerate(selected_cards):
+            logging.info('{} - {}'.format(i, card))
+        for i, card in enumerate(self.cards_open):
+            for set_card in selected_cards:
                 if card['id'] == set_card['id']:
+                    logging.info('to_replace: {}'.format(to_replace))
+                    logging.info('indices_extra_cards: {}'.format(indices_extra_cards))
+                    logging.info('Set with: {}'.format(card))
+                    logging.info('This card is on index: {}'.format(i))
                     if i in indices_extra_cards:
+                        logging.info('index: {} is one of the extra cards and is changed to None'.format(i))
                         # Extra card and part of set, will be removed later.
                         self.cards_open[i] = None
                         indices_extra_cards.remove(i)
+                        for i, card in enumerate(self.cards_open):
+                            logging.info('{} - {}'.format(i, card))
                     elif indices_extra_cards:
+                        logging.info('index: {} is not extra and will be replaced'.format(i))
                         # This set card is not extra, will be replaced by one
                         # of the extra cards.
                         to_replace.append(i)
                     else:
                         # There are no extra cards.
                         self.cards_open[i] = self._take_n_cards(1)[0]
-                    del selected_cards[j]
+                    selected_cards.remove(set_card)
         # Move extra cards if any.
         if indices_extra_cards:
             self._move_extra_cards(indices_extra_cards, to_replace)
 
         # Remove the extra cards that were part of the set.
         self.cards_open = list(filter(None, self.cards_open))
+        if len(self.cards_open) % 3 != 0:
+            logging.info('###################################################################################')
+            for i, card in enumerate(self.cards_open):
+                logging.info('{} - {}'.format(i, card))
 
     def end_game(self):
         """Ensure end of game settings are handled."""
@@ -138,12 +159,19 @@ class Cards(object):
         # Copy extra cards to the positions where cards need to be replaced.
         # Note, the extra cards are not part of the set, those cards are
         # already removed.
+        logging.info('\t-\t-\t-\t--\t-\t-\t-\t-\t-\t-\t-\t-\t-')
+        logging.info('In _move_extra_cards')
+        logging.info('indices_extra_cards: {}'.format(indices_extra_cards))
+        for i, card in enumerate(self.cards_open):
+            logging.info('{} - {}'.format(i, card))
         for index in to_replace:
-            self.cards_open[index] = self.cards_open[indices_extra_cards[-1]]
-            del self.cards_open[indices_extra_cards[-1]]
-            del indices_extra_cards[-1]
-        if len(self.cards_open) % 3 != 0:
-            import pdb; pdb.set_trace()  # breakpoint 9268977a //
+            logging.info('nr cards open: {}'.format(len(self.cards_open)))
+            logging.info('index: {}\tfrom to_replace: {}'.format(index, to_replace))
+            index_extra_card = indices_extra_cards[-1]
+            logging.info('index_extra_card: {}'.format(index_extra_card))
+            self.cards_open[index] = self.cards_open[index_extra_card]
+            del self.cards_open[index_extra_card]
+            indices_extra_cards.remove(index_extra_card)
 
     def _take_n_cards(self, n):
         """Take n cards from the deck."""
@@ -157,6 +185,7 @@ class Cards(object):
 
     def _indices_extra_cards(self, nr_cards):
         """Determines which indices extra cards have."""
+        logging.info('--------------------------nr_cards {}'.format(nr_cards))
         if nr_cards > 12:
             nr_cards_per_row = int(nr_cards / 3)
             return [(i + 1) * (nr_cards_per_row - 1) + i for i in range(3)]
