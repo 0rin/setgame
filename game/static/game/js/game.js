@@ -33,10 +33,6 @@ function confirmSetExistence(card_id) {
     }
 }
 
-function endOfGame() {
-    alert('End of game. There is no set, and there are no cards left.');
-}
-
 function incorrectSet() {
     alert('That is not a set.');
 }

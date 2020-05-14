@@ -86,7 +86,6 @@
     </form>
     <script type="text/javascript">
         {% if a_set %}confirmSetExistence('{{ a_set.id }}');{% endif %}
-        {% if end_of_game %}endOfGame();{% endif %}
         {% if not correct_set_call %}incorrectSet();{% endif %}
     </script>
 {% endblock %}

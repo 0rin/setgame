@@ -79,8 +79,8 @@ def test_process_selection():
     cards = Cards()
     selection = '42,78,1'
     cards.process_selection(selection)
-    assert(cards.number_sets_found == 1)
     assert(cards.correct_set_call)
+    assert(cards.number_sets_found == 1)
 
 
 def test_indices_extra_cards():

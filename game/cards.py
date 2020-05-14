@@ -9,8 +9,8 @@ class Deck(object):
                       'shading': shading,
                       'range': range(number),
                       'number': number,
-                      'shape': shape} for color in ['red']#, 'green', 'blue']
-                     for number in [1]#, 2, 3]
+                      'shape': shape} for color in ['red', 'green', 'blue']
+                     for number in [1, 2, 3]
                      for shading in ['solid', 'striped', 'open']
                      for shape in ['oval', 'diamond', 'rectangle']]
     for i in range(len(original_deck)):
@@ -44,7 +44,6 @@ class Cards(object):
         self.end_of_game = False
         self.number_sets_found = 0
         self.cards_open = self._take_n_cards(12)
-        # self.cards_open = self.setless[:] + self.setless_extra[:]
         self.hint = False
         self.correct_set_call = True
         self.results = []
@@ -73,6 +72,8 @@ class Cards(object):
         for combo in combinations(self.cards_open, 3):
             if self._validate_set(combo):
                 self.hint = combo[0]
+                return True
+        return False
 
     def process_selection(self, selected_ids):
         """
@@ -131,15 +132,22 @@ class Cards(object):
         if indices_extra_cards:
             self._move_extra_cards(indices_extra_cards, to_replace)
 
-        # Remove the extra cards that were part of the set
+        # Remove the extra cards that were part of the set.
         self.cards_open = list(filter(None, self.cards_open))
 
-        # Check if there are still cards left.
+        self._check_if_game_ended()
+
+    def _check_if_game_ended(self):
+        """Check if the end of the game was reached."""
         blanks = (card['blank'] for card in self.cards_open)
-        if all(blanks):
-            self.total_time = round((datetime.now()\
-                - self.start_time_game).total_seconds(), 2)
-            self.end_of_game = True
+        if all(blanks) or (any(blanks) and not self.check_for_set()):
+            self.end_game()
+
+    def end_game(self):
+        """Ensure end of game settings are handled."""
+        self.total_time =\
+            round((datetime.now() - self.start_time_game).total_seconds(), 2)
+        self.end_of_game = True
 
     def _move_extra_cards(self, indices_extra_cards, to_replace):
         # Copy extra cards to the positions where cards need to be replaced.
@@ -151,14 +159,14 @@ class Cards(object):
             del indices_extra_cards[-1]
 
     def _take_n_cards(self, n):
-        """Draws n cards from the deck."""
-        drawn_cards = []
+        """Take n cards from the deck."""
+        cards_taken = []
         for i in range(n):
             try:
-                drawn_cards.append(self.deck.pop())
+                cards_taken.append(self.deck.pop())
             except IndexError:
-                drawn_cards.append({'blank': 'blank', 'id': '_'})
-        return drawn_cards
+                cards_taken.append({'blank': 'blank', 'id': '_'})
+        return cards_taken
 
     def _indices_extra_cards(self, nr_cards):
         """Determines which indices extra cards have."""

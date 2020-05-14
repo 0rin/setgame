@@ -11,9 +11,6 @@
   <script src="{% static '/game/js/game.js' %}"></script>
   </head>
   <body>
-    {% if end_of_game %}
-        <div class="button" id="end_of_game_message">End of Game</div>
-    {% endif %}
     <div id="all_containing_section">
         {% block main_content %}
         {% endblock %}
