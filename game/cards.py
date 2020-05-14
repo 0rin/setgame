@@ -59,16 +59,14 @@ class Cards(object):
 
     def check_for_set(self):
         """
-        Determines if there is a set in the current open cards.
-        Sets the 'a_set' property of this class to the id of the first card of
-        a set.
+        Determines if there is a set in the current open cards. Returns an
+        array with, either the combination of cards that is a set, or False.
         """
         self.correct_set_call = True
         for combo in combinations(self.cards_open, 3):
             if self._validate_set(combo):
-                self.hint = combo[0]
-                return True
-        return False
+                return combo
+        return [False]
 
     def process_selection(self, selected_ids):
         """
@@ -144,6 +142,8 @@ class Cards(object):
             self.cards_open[index] = self.cards_open[indices_extra_cards[-1]]
             del self.cards_open[indices_extra_cards[-1]]
             del indices_extra_cards[-1]
+        if len(self.cards_open) % 3 != 0:
+            import pdb; pdb.set_trace()  # breakpoint 9268977a //
 
     def _take_n_cards(self, n):
         """Take n cards from the deck."""

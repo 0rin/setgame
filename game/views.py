@@ -17,8 +17,9 @@ def game(request):
         if req == 'new_game':
             cards.new_game()
         elif req == 'check_set':
-            cards.check_for_set()
-            if not cards.hint:
+            a_set = cards.check_for_set()
+            cards.hint = a_set[0]
+            if not a_set:
                 if len(cards.deck) >= 3:
                     cards.open_extra_cards()
                 else:

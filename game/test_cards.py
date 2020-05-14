@@ -66,13 +66,12 @@ def test_check_for_set():
 
     # There is no set
     cards.cards_open = setless
-    cards.check_for_set()
-    assert(not cards.hint)
+    assert(not cards.check_for_set()[0])
 
     # There is a set
     cards.cards_open = with_set
     cards.check_for_set()
-    assert(cards.hint == setless[0])
+    assert(cards.check_for_set()[0] == with_set[0])
 
 
 def test_process_selection():
@@ -99,3 +98,24 @@ def test_handling_extra_cards():
     assert(not cards.hint)
     cards.open_extra_cards()
     assert(len(cards.cards_open) == 18)
+
+def test_full_game():
+    cards = Cards()
+    cards.new_game()
+    while not cards.end_of_game:
+        assert(len(cards.cards_open) % 3 == 0)
+        assert(len(cards.deck) % 3 == 0)
+        a_set = cards.check_for_set()
+        if a_set[0] != False:
+            ids = ','.join(str(card['id']) for card in a_set)
+            cards.process_selection(ids)
+            cards.end_of_game = False
+            assert(len(cards.cards_open) % 3 == 0)
+        elif len(cards.deck) >= 3:
+            cards.open_extra_cards()
+        else:
+            cards.end_game()
+
+def test_multiple_full_games():
+    for i in range(10):
+        test_full_game()
