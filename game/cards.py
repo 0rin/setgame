@@ -16,11 +16,6 @@ class Deck(object):
     for i in range(len(original_deck)):
         original_deck[i]['id'] = i
         original_deck[i]['blank'] = False
-        # print(original_deck[i]['color'],
-        #       original_deck[i]['shading'],
-        #       original_deck[i]['number'],
-        #       original_deck[i]['shape'],
-        #       original_deck[i]['id'])
 
     def new_shuffled_deck(self):
         """Gives a new, shuffled deck."""
@@ -134,14 +129,6 @@ class Cards(object):
 
         # Remove the extra cards that were part of the set.
         self.cards_open = list(filter(None, self.cards_open))
-
-        self._check_if_game_ended()
-
-    def _check_if_game_ended(self):
-        """Check if the end of the game was reached."""
-        blanks = (card['blank'] for card in self.cards_open)
-        if all(blanks) or (any(blanks) and not self.check_for_set()):
-            self.end_game()
 
     def end_game(self):
         """Ensure end of game settings are handled."""
