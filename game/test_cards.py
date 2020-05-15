@@ -1,4 +1,7 @@
 from .cards import Deck, Cards
+import logging
+
+logging.basicConfig(level=logging.WARN, filename='test_cards.log')
 
 setless = [
     {'color': 'green', 'shading': 'open', 'range': range(0, 2),
@@ -102,23 +105,30 @@ def test_handling_extra_cards():
 
 
 def test_full_game():
+    logging.info('------------Start new game')
     cards = Cards()
     cards.new_game()
     while not cards.end_of_game:
         assert(len(cards.cards_open) % 3 == 0)
         assert(len(cards.deck) % 3 == 0)
         a_set = cards.check_for_set()
-        if a_set[0] is not False:
+        if a_set[0]:
             ids = ','.join(str(card['id']) for card in a_set)
             cards.process_selection(ids)
             cards.end_of_game = False
             assert(len(cards.cards_open) % 3 == 0)
+            logging.info('Found set nr {}'.format(cards.number_sets_found))
         elif len(cards.deck) >= 3:
             cards.open_extra_cards()
+            assert(len(cards.cards_open) < 22)  # 20 cards garantees a set
+            logging.info('No set, nr cards open goes to {}'
+                         .format(len(cards.cards_open)))
+            if len(cards.cards_open) > 18:
+                logging.warning('This should be really exceptional')
         else:
             cards.end_game()
 
 
 def test_multiple_full_games():
-    for i in range(100):
+    for i in range(1000):
         test_full_game()

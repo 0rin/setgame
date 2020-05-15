@@ -96,6 +96,7 @@ class Cards(object):
             for card_id in selected_ids:
                 if card['id'] == int(card_id):
                     result.append(card)
+                    selected_ids.remove(card_id)
         return result
 
     def _handle_found_set(self, selected_cards):
