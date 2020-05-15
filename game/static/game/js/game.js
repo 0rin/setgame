@@ -29,7 +29,7 @@ function submitSelectedCards() {
 
 function confirmSetExistence(card_id) {
     if (confirm('There is a set. Want a hint?')) {
-        document.getElementById(card_id).style.background = "lightGrey";
+        document.getElementById(card_id).style.borderWidth = "5px";
     }
 }
 

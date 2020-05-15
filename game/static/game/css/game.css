@@ -69,7 +69,7 @@
 
 .svg_element {
   position: absolute;
-  left: 6px;
+  left: 3px;
 }
 
 .red {
@@ -138,8 +138,8 @@
   white-space: initial;
   border: 2px solid black;
   border-radius: 25px;
-  width: 200px;
-  height: 300px;
+  width: 170px;
+  height: 250px;
   display: table-cell;
   position: relative;
 }
@@ -210,25 +210,25 @@
 }
 
 .nr_1_1 {
-  top: 120px;
+  top: 100px;
 }
 
 .nr_2_1 {
-  top: 90px;
+  top: 75px;
 }
 
 .nr_2_2 {
-  top: 140px;
-}
-
-.nr_3_1 {
-  top: 60px;
-}
-
-.nr_3_2 {
   top: 120px;
 }
 
+.nr_3_1 {
+  top: 50px;
+}
+
+.nr_3_2 {
+  top: 100px;
+}
+
 .nr_3_3 {
-  top: 180px;
+  top: 150px;
 }
