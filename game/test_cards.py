@@ -100,6 +100,7 @@ def test_handling_extra_cards():
     cards.open_extra_cards()
     assert(len(cards.cards_open) == 18)
 
+
 def test_full_game():
     cards = Cards()
     cards.new_game()
@@ -107,7 +108,7 @@ def test_full_game():
         assert(len(cards.cards_open) % 3 == 0)
         assert(len(cards.deck) % 3 == 0)
         a_set = cards.check_for_set()
-        if a_set[0] != False:
+        if a_set[0] is not False:
             ids = ','.join(str(card['id']) for card in a_set)
             cards.process_selection(ids)
             cards.end_of_game = False
@@ -117,6 +118,7 @@ def test_full_game():
         else:
             cards.end_game()
 
+
 def test_multiple_full_games():
-    for i in range(10):
+    for i in range(100):
         test_full_game()

@@ -68,48 +68,48 @@
 }
 
 .svg_element {
-    position: absolute;
-    left: 6px;
+  position: absolute;
+  left: 6px;
 }
 
 .red {
-    stroke: red;
+  stroke: red;
 }
 
 .green {
-    stroke: green;
+  stroke: green;
 }
 
 .blue {
-    stroke: blue;
+  stroke: blue;
 }
 
 .open {
-    fill: none;
+  fill: none;
 }
 
 .red_solid {
-    fill: red;
+  fill: red;
 }
 
 .green_solid {
-    fill: green;
+  fill: green;
 }
 
 .blue_solid {
-    fill: blue;
+  fill: blue;
 }
 
 .red_striped {
-    fill:url(#stripes_red);
+  fill:url(#stripes_red);
 }
 
 .green_striped {
-    fill:url(#stripes_green);
+  fill:url(#stripes_green);
 }
 
 .blue_striped {
-    fill:url(#stripes_blue);
+  fill:url(#stripes_blue);
 }
 
 .oval {
@@ -117,47 +117,47 @@
 }
 
 .diamond {
-    vector-effect: non-scaling-stroke;
-    stroke-width: 3px;
+  vector-effect: non-scaling-stroke;
+  stroke-width: 3px;
 }
 
 .diamond_small {
-    vector-effect: non-scaling-stroke;
-    stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1px;
 }
 
 .rectangle {
-    stroke-width: 30px;
+  stroke-width: 30px;
 }
 
 .row {
-    display: table-row;
+  display: table-row;
 }
 
 .card_outline {
-    white-space: initial;
-    border: 2px solid black;
-    border-radius: 25px;
-    width: 200px;
-    height: 300px;
-    display: table-cell;
-    position: relative;
+  white-space: initial;
+  border: 2px solid black;
+  border-radius: 25px;
+  width: 200px;
+  height: 300px;
+  display: table-cell;
+  position: relative;
 }
 
 .card_outline_small {
-    border-radius: 15px;
-    width: 75px;
-    height: 110px;
-    position: relative;
+  border-radius: 15px;
+  width: 75px;
+  height: 110px;
+  position: relative;
 }
 
 .blank {
-    display: none;
+  display: none;
 }
 
 .column_space {
-    display: table-cell;
-    width: 10px;
+  display: table-cell;
+  width: 10px;
 }
 
 .row_space {
