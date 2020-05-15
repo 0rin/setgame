@@ -29,6 +29,8 @@ def game(request):
         elif req == 'back_to_game':
             cards.hint = False
             pass
+        elif req == 'view_scores':
+            return redirect(scores)
         else:
             cards.end_of_game = False
             cards.process_selection(req)
@@ -37,25 +39,27 @@ def game(request):
     elif all(card['blank'] for card in cards.cards_open):
         cards.end_game()
         return redirect(results)
-    elif cards.end_of_game:
+    elif cards.results.end_of_game:
         return redirect(results)
     context = {'cards_open': cards.cards_open,
-               'number_sets_found': cards.number_sets_found,
-               'a_set': cards.hint,
+               'hint': cards.hint,
                'row_length': len(cards.cards_open)/3,
                'correct_set_call': cards.correct_set_call}
     return render(request, 'game/game.html', context)
 
 
 def results(request):
-    try:
-        average = round(int(cards.total_time) / cards.number_sets_found, 2)
-    except (ZeroDivisionError, ValueError):
-        average = ''
-    context = {'results': cards.results,
-               'number_sets_found': cards.number_sets_found,
-               'end_of_game': cards.end_of_game,
-               'a_set': cards.hint,
-               'total_time': cards.total_time,
-               'average': average}
+    context = {'results': cards.results.statistics_sets,
+               'number_sets_found': cards.results.number_sets_found,
+               'end_of_game': cards.results.end_of_game,
+               'total_time': cards.results.total_time,
+               'average': cards.results.average,
+               'hints': cards.results.hints,
+               'wrong_sets': cards.results.wrong_sets,
+               'score': cards.results.score,
+               'status': cards.results.status}
     return render(request, 'game/results.html', context)
+
+
+def scores(request):
+    return render(request, 'game/scores.html', {})

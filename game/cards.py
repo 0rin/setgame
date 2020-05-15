@@ -33,18 +33,13 @@ class Cards(object):
 
     def __init__(self):
         self.new_game()
+        self.results = Results()
 
     def new_game(self):
         self.deck = Deck().new_shuffled_deck()
-        self.end_of_game = False
-        self.number_sets_found = 0
         self.cards_open = self._take_n_cards(12)
-        self.hint = False
         self.correct_set_call = True
-        self.results = []
-        self.start_time = datetime.now()
-        self.start_time_game = datetime.now()
-        self.total_time = ' - Game not ended yet - '
+        self.hint = False
 
     def open_extra_cards(self):
         """
@@ -62,9 +57,10 @@ class Cards(object):
         Determines if there is a set in the current open cards. Returns an
         array with, either the combination of cards that is a set, or False.
         """
-        self.correct_set_call = True
+        self.results.correct_set_call = True
+        self.results.hints += 1
         for combo in combinations(self.cards_open, 3):
-            if self._validate_set(combo):
+            if self._validate_set(combo, False):
                 return combo
         return [False]
 
@@ -77,19 +73,20 @@ class Cards(object):
         selected = self._selected_cards(selected_ids)
         selected_cards = [item['card'] for item in selected]
         if self._validate_set(selected_cards):
-            self.number_sets_found += 1
+            self.results.number_sets_found += 1
             duration =\
-                round((datetime.now() - self.start_time).total_seconds(), 2)
+                round((datetime.now() - self.results.start_time).total_seconds(), 2)
             result = {'set': selected_cards[:],
                       'time': duration,
                       'hint': self.hint}
-            self.results.append(result)
+            self.results.statistics_sets.append(result)
             self.correct_set_call = True
             indices_of_set = [item['index'] for item in selected]
             self._handle_found_set(indices_of_set)
         else:
             self.correct_set_call = False
-        self.start_time = datetime.now()  # Reset start time
+            self.results.wrong_sets += 1
+        self.results.start_time = datetime.now()  # Reset start time
 
     def _selected_cards(self, selected_ids):
         """Figure out which cards have been selected and their indices."""
@@ -127,9 +124,15 @@ class Cards(object):
 
     def end_game(self):
         """Ensure end of game settings are handled."""
-        self.total_time =\
-            round((datetime.now() - self.start_time_game).total_seconds(), 2)
-        self.end_of_game = True
+        self.results.total_time =\
+            round((datetime.now() - self.results.start_time_game).total_seconds(), 2)
+        try:
+            self.results.average = self.results.total_time / self.results.number_sets_found
+        except ZeroDivisionError:
+            self.results.average = 0
+
+        self.results.score = (27 + self.results.hints + self.results.wrong_sets) * self.results.average
+        self.results.end_of_game = True
 
     def _move_extra_cards(self, indices_extra_cards, to_replace):
         # Copy extra cards to the positions where cards need to be replaced.
@@ -160,7 +163,7 @@ class Cards(object):
         else:
             return []
 
-    def _validate_set(self, combo):
+    def _validate_set(self, combo, users_claim=True):
         """Determines if a combination of three cards is a set."""
         colors = []
         numbers = []
@@ -181,3 +184,19 @@ class Cards(object):
             if len(uniq) == 2:
                 return False
         return True
+
+class Results(object):
+    """This class keeps track of all results and statistics."""
+
+    def __init__(self):
+        self.end_of_game = False
+        self.average = 0
+        self.number_sets_found = 0
+        self.hints = 0
+        self.wrong_sets = 0
+        self.score = 0
+        self.statistics_sets = []
+        self.start_time = datetime.now()
+        self.start_time_game = datetime.now()
+        self.total_time = 0
+        self.status = 'Game not ended yet'

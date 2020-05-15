@@ -50,10 +50,10 @@ def test_new_game():
     cards = Cards()
     cards.new_game()
     assert(len(cards.deck) == 69)
-    assert(cards.number_sets_found == 0)
+    assert(cards.results.number_sets_found == 0)
     assert(len(cards.cards_open) == 12)
     assert(not cards.hint)
-    assert(not cards.end_of_game)
+    assert(not cards.results.end_of_game)
     assert(cards.correct_set_call)
 
 
@@ -83,7 +83,7 @@ def test_process_selection():
     cards.cards_open = with_set
     cards.process_selection(selection)
     assert(cards.correct_set_call)
-    assert(cards.number_sets_found == 1)
+    assert(cards.results.number_sets_found == 1)
 
 
 def test_indices_extra_cards():
@@ -108,16 +108,16 @@ def test_full_game():
     logging.info('------------Start new game')
     cards = Cards()
     cards.new_game()
-    while not cards.end_of_game:
+    while not cards.results.end_of_game:
         assert(len(cards.cards_open) % 3 == 0)
         assert(len(cards.deck) % 3 == 0)
         a_set = cards.check_for_set()
         if a_set[0]:
             ids = ','.join(str(card['id']) for card in a_set)
             cards.process_selection(ids)
-            cards.end_of_game = False
+            cards.results.end_of_game = False
             assert(len(cards.cards_open) % 3 == 0)
-            logging.info('Found set nr {}'.format(cards.number_sets_found))
+            logging.info('Found set nr {}'.format(cards.results.number_sets_found))
         elif len(cards.deck) >= 3:
             cards.open_extra_cards()
             assert(len(cards.cards_open) < 22)  # 20 cards garantees a set
@@ -130,5 +130,5 @@ def test_full_game():
 
 
 def test_multiple_full_games():
-    for i in range(1000):
+    for i in range(100):
         test_full_game()
