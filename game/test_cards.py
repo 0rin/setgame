@@ -130,5 +130,5 @@ def test_full_game():
 
 
 def test_multiple_full_games():
-    for i in range(100):
+    for i in range(1000):
         test_full_game()

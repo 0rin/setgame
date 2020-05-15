@@ -74,7 +74,8 @@ class Cards(object):
         they don't. Determines the current case and handles it.
         """
         selected_ids = selected_ids.split(',')
-        selected_cards = self._selected_cards(selected_ids)
+        selected = self._selected_cards(selected_ids)
+        selected_cards = [item['card'] for item in selected]
         if self._validate_set(selected_cards):
             self.number_sets_found += 1
             duration =\
@@ -84,22 +85,23 @@ class Cards(object):
                       'hint': self.hint}
             self.results.append(result)
             self.correct_set_call = True
-            self._handle_found_set(selected_cards)
+            indices_of_set = [item['index'] for item in selected]
+            self._handle_found_set(indices_of_set)
         else:
             self.correct_set_call = False
         self.start_time = datetime.now()  # Reset start time
 
     def _selected_cards(self, selected_ids):
-        """Figure out which cards have been selected."""
+        """Figure out which cards have been selected and their indices."""
         result = []
-        for card in self.cards_open:
+        for i, card in enumerate(self.cards_open):
             for card_id in selected_ids:
                 if card['id'] == int(card_id):
-                    result.append(card)
+                    result.append({'card': card, 'index': i })
                     selected_ids.remove(card_id)
         return result
 
-    def _handle_found_set(self, selected_cards):
+    def _handle_found_set(self, indices):
         """
         Handles the correct procedure after a set was found. Either replaces
         the cards from the set with new cards, or with the extra cards that
@@ -107,26 +109,20 @@ class Cards(object):
         """
         to_replace = []
         indices_extra_cards = self._indices_extra_cards(len(self.cards_open))
-        for i, card in enumerate(self.cards_open):
-            for set_card in selected_cards:
-                if card['id'] == set_card['id']:
-                    if i in indices_extra_cards:
-                        # Extra card and part of set, will be removed later.
-                        self.cards_open[i] = None
-                        indices_extra_cards.remove(i)
-                    elif indices_extra_cards:
-                        # This set card is not extra, will be replaced by one
-                        # of the extra cards.
-                        to_replace.append(i)
-                    else:
-                        # There are no extra cards.
-                        self.cards_open[i] = self._take_n_cards(1)[0]
-                    selected_cards.remove(set_card)
-        # Move extra cards if any.
+        for index in indices:
+            if index in indices_extra_cards:
+                # Extra card and part of set, will be removed later.
+                self.cards_open[index] = None
+                indices_extra_cards.remove(index)
+                continue
+            elif indices_extra_cards:
+                # This set card is not extra and will be replaced by one
+                # of the extra cards.
+                to_replace.append(index)
+            else:
+                self.cards_open[index] = self._take_n_cards(1)[0]
         if indices_extra_cards:
             self._move_extra_cards(indices_extra_cards, to_replace)
-
-        # Remove the extra cards that were part of the set.
         self.cards_open = list(filter(None, self.cards_open))
 
     def end_game(self):
@@ -137,10 +133,11 @@ class Cards(object):
 
     def _move_extra_cards(self, indices_extra_cards, to_replace):
         # Copy extra cards to the positions where cards need to be replaced.
-        # Note, the extra cards are not part of the set, those cards are
+        # Then turn the extra card to None, to nominate it for removal.
+        # NOTE: The extra cards are not part of the set, those cards are
         # already removed.
         for index in to_replace:
-            index_extra_card = indices_extra_cards[-1]
+            index_extra_card = indices_extra_cards[0]
             self.cards_open[index] = self.cards_open[index_extra_card]
             self.cards_open[index_extra_card] = None
             indices_extra_cards.remove(index_extra_card)
