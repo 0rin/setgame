@@ -9,7 +9,7 @@ cards = Cards()
 
 
 def game(request):
-    if request.method == 'POST' or not cards.cards_open:
+    if request.method == 'POST':
         try:
             req = request.POST['req']
         except KeyError:
@@ -17,9 +17,8 @@ def game(request):
         if req == 'new_game':
             cards.new_game()
         elif req == 'check_set':
-            a_set = cards.check_for_set()
-            cards.hint = a_set[0]
-            if not a_set:
+            cards.hint = cards.check_for_set()[0]
+            if not cards.hint:
                 if len(cards.deck) >= 3:
                     cards.open_extra_cards()
                 else:
@@ -35,6 +34,9 @@ def game(request):
             cards.process_selection(req)
             cards.hint = False
         return HttpResponseRedirect(reverse('game'))
+    elif all(card['blank'] for card in cards.cards_open):
+        cards.end_game()
+        return redirect(results)
     elif cards.end_of_game:
         return redirect(results)
     context = {'cards_open': cards.cards_open,
