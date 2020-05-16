@@ -63,13 +63,25 @@
     <div class="button" id="dashboard">
         <h2>Results</h2>
         SETS Found: {{ number_sets_found }}<br/>
-        Total time: {{ total_time }}<br/>
-        Average time per set: {{ average }}<br/>
+        Total Time: {{ total_time }}<br/>
+        Average Time per SET: {{ average }}<br/>
         Hints: {{ hints }}<br/>
-        Wrong set calls: {{ wrong_sets }}<br/>
+        Wrong SET Calls: {{ wrong_sets }}<br/>
         Score: {{ score }}<br/>
-        {{ status }}<br/>
-        Enter name to save score
+        {% if end_of_game %}
+            <form action="{% url 'scores' %}" method="POST">
+                {% csrf_token %}
+                <input id="name_field" name="name"
+                    placeholder="Enter name to save score..." required="True">
+                <input type="hidden" name="total_time" value="{{ total_time }}">
+                <input type="hidden" name="average" value="{{ average }}">
+                <input type="hidden" name="hints" value="{{ hints}}">
+                <input type="hidden" name="wrong_sets" value="{{ wrong_sets}}">
+                <input type="hidden" name="score" value="{{ score}}">
+            </form>
+        {% else %}
+            <p id="game_not_ended">Game Not Ended Yet!</p>
+        {% endif %}
     </div>
     {% if end_of_game %}
         <form action="{% url 'game' %}" method="POST" id="another_game">

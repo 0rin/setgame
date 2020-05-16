@@ -2,7 +2,7 @@ from django import forms
 from .models import Highscore
 
 
-class ScoreForm(forms.ModelForm):
+class HighscoreForm(forms.ModelForm):
     """docstring for ScoreForm"""
     class Meta:
         model = Highscore

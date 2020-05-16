@@ -9,8 +9,8 @@ class Deck(object):
                       'shading': shading,
                       'range': range(number),
                       'number': number,
-                      'shape': shape} for color in ['red', 'green', 'blue']
-                     for number in [1, 2, 3]
+                      'shape': shape} for color in ['red']#, 'green', 'blue']
+                     for number in [1]#, 2, 3]
                      for shading in ['solid', 'striped', 'open']
                      for shape in ['oval', 'diamond', 'rectangle']]
     for i in range(len(original_deck)):
@@ -33,9 +33,9 @@ class Cards(object):
 
     def __init__(self):
         self.new_game()
-        self.results = Results()
 
     def new_game(self):
+        self.results = Results()
         self.deck = Deck().new_shuffled_deck()
         self.cards_open = self._take_n_cards(12)
         self.correct_set_call = True
@@ -86,7 +86,7 @@ class Cards(object):
         else:
             self.correct_set_call = False
             self.results.wrong_sets += 1
-        self.results.start_time = datetime.now()  # Reset start time
+        self.results.start_time = datetime.now()
         self.results.end_of_game = False
         self.hint = False
 
@@ -129,7 +129,7 @@ class Cards(object):
         self.results.total_time =\
             round((datetime.now() - self.results.start_time_game).total_seconds(), 2)
         try:
-            self.results.average = self.results.total_time / self.results.number_sets_found
+            self.results.average = round(self.results.total_time / self.results.number_sets_found, 2)
         except ZeroDivisionError:
             self.results.average = 0
 
@@ -201,4 +201,3 @@ class Results(object):
         self.start_time = datetime.now()
         self.start_time_game = datetime.now()
         self.total_time = 0
-        self.status = 'Game not ended yet'

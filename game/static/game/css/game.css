@@ -237,3 +237,10 @@ table, th, td {
   border: 1px solid black;
 }
 
+#name_field {
+  width: 170px;
+}
+
+#game_not_ended {
+  color: red;
+}

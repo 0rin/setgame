@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .cards import Deck, Cards
 from .models import Highscore
+from .forms import HighscoreForm
 
 cards = Cards()
 
@@ -53,11 +54,30 @@ def results(request):
                'average': cards.results.average,
                'hints': cards.results.hints,
                'wrong_sets': cards.results.wrong_sets,
-               'score': cards.results.score,
-               'status': cards.results.status}
+               'score': cards.results.score}
     return render(request, 'game/results.html', context)
 
 
 def scores(request):
-    context = {'stored_results': Highscore.objects.all}
+    score_form = HighscoreForm(request.POST or None)
+    if request.method == 'POST':
+        if score_form.is_valid():
+            data = score_form.cleaned_data
+            form_name = data['name']
+            form_total_time = data['total_time']
+            form_total_time = data['total_time']
+            form_average = data['average']
+            form_hints = data['hints']
+            form_wrong_sets = data['wrong_sets']
+            form_score = data['score']
+            Highscore.objects.create(name=form_name,
+                                     total_time=form_total_time,
+                                     average=form_average,
+                                     hints=form_hints,
+                                     wrong_sets=form_wrong_sets,
+                                     score=form_score)
+        else:
+            print(score_form.errors)
+    context = {'stored_results': Highscore.objects.all,
+               'form': score_form}
     return render(request, 'game/scores.html', context)
