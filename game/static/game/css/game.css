@@ -231,3 +231,9 @@
 .nr_3_3 {
   top: 150px;
 }
+
+table, th, td {
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+

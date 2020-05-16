@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .cards import Deck, Cards
-import random
+from .models import Highscore
 
 cards = Cards()
 
@@ -28,13 +28,10 @@ def game(request):
             return redirect(results)
         elif req == 'back_to_game':
             cards.hint = False
-            pass
         elif req == 'view_scores':
             return redirect(scores)
         else:
-            cards.end_of_game = False
             cards.process_selection(req)
-            cards.hint = False
         return HttpResponseRedirect(reverse('game'))
     elif all(card['blank'] for card in cards.cards_open):
         cards.end_game()
@@ -62,4 +59,5 @@ def results(request):
 
 
 def scores(request):
-    return render(request, 'game/scores.html', {})
+    context = {'stored_results': Highscore.objects.all}
+    return render(request, 'game/scores.html', context)

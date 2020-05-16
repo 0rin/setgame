@@ -1,8 +1,14 @@
 from django import forms
-# from .models import NewGame
+from .models import Highscore
 
 
-# class NewGameForm(forms.ModelForm):
-#     """docstring for Form"""
-#     class Meta:
-#         model = NewGame
+class ScoreForm(forms.ModelForm):
+    """docstring for ScoreForm"""
+    class Meta:
+        model = Highscore
+        fields = ['name',
+                  'total_time',
+                  'average',
+                  'hints',
+                  'wrong_sets',
+                  'score']

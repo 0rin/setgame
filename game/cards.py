@@ -87,6 +87,8 @@ class Cards(object):
             self.correct_set_call = False
             self.results.wrong_sets += 1
         self.results.start_time = datetime.now()  # Reset start time
+        self.results.end_of_game = False
+        self.hint = False
 
     def _selected_cards(self, selected_ids):
         """Figure out which cards have been selected and their indices."""

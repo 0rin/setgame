@@ -1,1 +1,32 @@
-<h1>Scores</h1>
+{% extends 'game/base.html' %}
+{% load static %}
+
+{% block main_content %}
+<table id="scores">
+    <tr>
+        <th>Name</th>
+        <th>Total time</th>
+        <th>Average time per SET</th>
+        <th>Hints</th>
+        <th>Wrong SET calls</th>
+        <th>Score</th>
+    </tr>
+    {% for result in stored_results %}
+        <tr>
+            <td>{{ result.name }}</td>
+            <td>{{ result.total_time }}</td>
+            <td>{{ result.average }}</td>
+            <td>{{ result.hints }}</td>
+            <td>{{ result.wrong_sets }}</td>
+            <td>{{ result.score }}</td>
+        </tr>
+    {% endfor %}
+</table>
+<form action="{% url 'results' %}" method="POST">
+    {% csrf_token %}
+    <button class="button" id="results" type="submit" name="req"
+        value="results">
+        Close
+    </button>
+</form>
+{% endblock %}
