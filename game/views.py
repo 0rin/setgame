@@ -47,6 +47,9 @@ def game(request):
 
 
 def results(request):
+    if request.method == 'POST':
+        stored = request.POST['stored']
+        cards.results.stored = stored
     context = {'results': cards.results.statistics_sets,
                'number_sets_found': cards.results.number_sets_found,
                'end_of_game': cards.results.end_of_game,
@@ -54,7 +57,8 @@ def results(request):
                'average': cards.results.average,
                'hints': cards.results.hints,
                'wrong_sets': cards.results.wrong_sets,
-               'score': cards.results.score}
+               'score': cards.results.score,
+               'stored': cards.results.stored}
     return render(request, 'game/results.html', context)
 
 

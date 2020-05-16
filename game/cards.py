@@ -133,7 +133,7 @@ class Cards(object):
         except ZeroDivisionError:
             self.results.average = 0
 
-        self.results.score = (27 + self.results.hints + self.results.wrong_sets) * self.results.average
+        self.results.score = round((27 + self.results.hints + self.results.wrong_sets) * self.results.average, 2)
         self.results.end_of_game = True
 
     def _move_extra_cards(self, indices_extra_cards, to_replace):
@@ -201,3 +201,4 @@ class Results(object):
         self.start_time = datetime.now()
         self.start_time_game = datetime.now()
         self.total_time = 0
+        self.stored = False

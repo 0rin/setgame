@@ -77,8 +77,11 @@
                 <input type="hidden" name="average" value="{{ average }}">
                 <input type="hidden" name="hints" value="{{ hints}}">
                 <input type="hidden" name="wrong_sets" value="{{ wrong_sets}}">
-                <input type="hidden" name="score" value="{{ score}}">
+                <input type="hidden" name="score" value="{{ score }}">
+                <input type="hidden" name="stored" value="stored">
             </form>
+        {% elif stored == 'stored' %}
+            <p>This Score was Saved</p>
         {% else %}
             <p id="game_not_ended">Game Not Ended Yet!</p>
         {% endif %}
