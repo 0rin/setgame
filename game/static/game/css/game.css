@@ -4,20 +4,16 @@
 
 #control_section {
   display: table-cell;
-  float: right;
   padding-left: 15px;
   padding-right: 15px;
-  padding-top: 30px;
 }
 
 #results_section {
   display: table-cell;
-  float: left;
 }
 
 #playing_section {
   display: table-cell;
-  float: center;
 }
 
 .button {

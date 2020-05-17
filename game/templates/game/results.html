@@ -94,7 +94,7 @@
             </button>
         </form>
     {% else %}
-        <form action="{% url 'game' %}" method="POST">
+        <form action="{% url 'results' %}" method="POST">
             {% csrf_token %}
             <button class="button" id="back_to_game" type="submit" name="req"
                 value="back_to_game">

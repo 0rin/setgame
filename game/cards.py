@@ -9,8 +9,8 @@ class Deck(object):
                       'shading': shading,
                       'range': range(number),
                       'number': number,
-                      'shape': shape} for color in ['red']#, 'green', 'blue']
-                     for number in [1]#, 2, 3]
+                      'shape': shape} for color in ['red', 'green', 'blue']
+                     for number in [1, 2, 3]
                      for shading in ['solid', 'striped', 'open']
                      for shape in ['oval', 'diamond', 'rectangle']]
     for i in range(len(original_deck)):
@@ -40,7 +40,6 @@ class Cards(object):
         self.cards_open = self._take_n_cards(12)
         self.correct_set_call = True
         self.hint = False
-        self.reset_timer = True
 
     def open_extra_cards(self):
         """

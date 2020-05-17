@@ -12,8 +12,6 @@ function cardClicked(card_id) {
         this_card.style.background = 'grey';
         selected_ids.push(card_id);
         if (selected_ids.length == 3) {
-            time = 0;
-            seconds = 0;
             submitSelectedCards();
             selected_ids.forEach(card => {
                 document.getElementById(card).style.background = 'white';
@@ -43,23 +41,3 @@ function incorrectSet() {
         alert('That is not a set.');
     }
 }
-
-function resetTimer() {
-    time = 0;
-    seconds = 0;
-    sessionStorage.time = time;
-    sessionStorage.seconds = seconds;
-}
-
-var time;
-var seconds;
-
-setInterval(function() {
-  time++;
-  milliseconds = time % 100;
-  if (milliseconds == 0) {
-    seconds++;
-  }
-  document.getElementById("stopwatch").innerHTML =
-    seconds + "." + milliseconds + "s ";
-}, 1);
