@@ -63,6 +63,10 @@
     <p class="button" id="sets_found">
         sets found:{{ number_sets_found }}
     </p>
+
+    <div id="stopwatch">
+        <div id="sw-time"></div>
+    </div>
     <form action="{% url 'game' %}" method="POST" id="another_game">
         {% csrf_token %}
         <button class="button" id="new_game" type="submit" name="req"
@@ -85,6 +89,7 @@
         </button>
     </form>
     <script type="text/javascript">
+        {% if reset_timer %}resetTimer();{% endif %}
         {% if hint %}confirmSetExistence('{{ hint.id }}');{% endif %}
         {% if not correct_set_call %}incorrectSet();{% endif %}
     </script>

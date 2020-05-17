@@ -18,6 +18,7 @@ def game(request):
         if req == 'new_game':
             cards.new_game()
         elif req == 'check_set':
+            cards.reset_timer = False
             cards.hint = cards.check_for_set()[0]
             if not cards.hint:
                 if len(cards.deck) >= 3:
@@ -26,11 +27,11 @@ def game(request):
                     cards.end_game()
                     return redirect(results)
         elif req == 'results':
+            cards.reset_timer = False
             return redirect(results)
         elif req == 'back_to_game':
+            cards.reset_timer = False
             cards.hint = False
-        elif req == 'view_scores':
-            return redirect(scores)
         else:
             cards.process_selection(req)
         return HttpResponseRedirect(reverse('game'))
@@ -42,11 +43,18 @@ def game(request):
     context = {'cards_open': cards.cards_open,
                'hint': cards.hint,
                'row_length': len(cards.cards_open)/3,
-               'correct_set_call': cards.correct_set_call}
+               'correct_set_call': cards.correct_set_call,
+               'reset_timer': cards.reset_timer}
     return render(request, 'game/game.html', context)
 
 
 def results(request):
+    if request.method == 'POST':
+        req = request.POST['req']
+        if req == 'view_scores':
+            cards.reset_timer = False
+            return redirect(scores)
+
     context = {'results': cards.results.statistics_sets,
                'number_sets_found': cards.results.number_sets_found,
                'end_of_game': cards.results.end_of_game,

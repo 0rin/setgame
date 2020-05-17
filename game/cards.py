@@ -40,6 +40,7 @@ class Cards(object):
         self.cards_open = self._take_n_cards(12)
         self.correct_set_call = True
         self.hint = False
+        self.reset_timer = True
 
     def open_extra_cards(self):
         """
@@ -202,4 +203,3 @@ class Results(object):
         self.start_time_game = datetime.now()
         self.total_time = 0
         self.stored = False
-        self.score_current_tenth_place = 10

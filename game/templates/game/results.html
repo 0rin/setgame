@@ -102,7 +102,7 @@
             </button>
         </form>
     {% endif %}
-    <form action="{% url 'game' %}" method="POST">
+    <form action="{% url 'results' %}" method="POST">
     {% csrf_token %}
         <button class="button" id="view_scores" type="submit" name="req"
             value="view_scores">
