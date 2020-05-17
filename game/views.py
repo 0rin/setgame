@@ -47,9 +47,6 @@ def game(request):
 
 
 def results(request):
-    if request.method == 'POST':
-        stored = request.POST['stored']
-        cards.results.stored = stored
     context = {'results': cards.results.statistics_sets,
                'number_sets_found': cards.results.number_sets_found,
                'end_of_game': cards.results.end_of_game,
@@ -63,6 +60,7 @@ def results(request):
 
 
 def scores(request):
+    print('scores, stored:', cards.results.stored)
     score_form = HighscoreForm(request.POST or None)
     if request.method == 'POST':
         if score_form.is_valid():
@@ -80,8 +78,9 @@ def scores(request):
                                      hints=form_hints,
                                      wrong_sets=form_wrong_sets,
                                      score=form_score)
+            cards.results.stored = True
         else:
             print(score_form.errors)
-    context = {'stored_results': Highscore.objects.all,
+    context = {'stored_results': Highscore.objects.order_by('score'),
                'form': score_form}
     return render(request, 'game/scores.html', context)

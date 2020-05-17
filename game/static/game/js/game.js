@@ -1,4 +1,5 @@
 var selected_ids = [];
+var wrong_set = true
 
 function cardClicked(card_id) {
     var this_card = document.getElementById(card_id);
@@ -27,13 +28,17 @@ function submitSelectedCards() {
     last_clicked_card.type = "submit";
 }
 
-function confirmSetExistence(card_id) {
+function confirmSetExistence(hint_id) {
+    wrong_set = false
     if (confirm('There is a set. Want a hint?')) {
-        document.getElementById(card_id).style.borderWidth = "5px";
+        document.getElementById(hint_id).style.borderWidth = "5px";
     }
 }
 
 function incorrectSet() {
-    alert('That is not a set.');
+    if (wrong_set) {
+        wrong_set = true
+        alert('That is not a set.');
+    }
 }
 

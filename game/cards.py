@@ -202,3 +202,4 @@ class Results(object):
         self.start_time_game = datetime.now()
         self.total_time = 0
         self.stored = False
+        self.score_current_tenth_place = 10
