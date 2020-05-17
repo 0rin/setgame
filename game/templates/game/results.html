@@ -53,7 +53,7 @@
                     {% endif %}
                 </h3>
             </div>
-            <div class="bar" style="width:{{result.time}}px;"></div>
+            <div class="bar" style="width:{{result.length_bar}}px;"></div>
         </div>
         <br/>
     {% endfor %}
@@ -72,7 +72,7 @@
             <form action="{% url 'scores' %}" method="POST">
                 {% csrf_token %}
                 <input id="name_field" name="name"
-                    placeholder="Enter name to save score..." required="True">
+                    placeholder="Fill in name and press enter to save score..." required="True">
                 <input type="hidden" name="total_time" value="{{ total_time }}">
                 <input type="hidden" name="average" value="{{ average }}">
                 <input type="hidden" name="hints" value="{{ hints}}">

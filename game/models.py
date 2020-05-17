@@ -7,7 +7,7 @@ class Highscore(models.Model):
     average = models.FloatField()
     hints = models.PositiveIntegerField()
     wrong_sets = models.PositiveIntegerField()
-    score = models.FloatField()
+    score = models.PositiveIntegerField()
 
     def __str__(self):
         return self.name + ' ' + str(self.score)

@@ -73,14 +73,7 @@ class Cards(object):
         selected = self._selected_cards(selected_ids)
         selected_cards = [item['card'] for item in selected]
         if self._validate_set(selected_cards):
-            self.results.number_sets_found += 1
-            duration =\
-                round((datetime.now() - self.results.start_time).total_seconds(), 2)
-            result = {'set': selected_cards[:],
-                      'time': duration,
-                      'hint': self.hint}
-            self.results.statistics_sets.append(result)
-            self.correct_set_call = True
+            self._administration(selected_cards)
             indices_of_set = [item['index'] for item in selected]
             self._handle_found_set(indices_of_set)
         else:
@@ -89,6 +82,22 @@ class Cards(object):
         self.results.start_time = datetime.now()
         self.results.end_of_game = False
         self.hint = False
+
+    def _administration(self, selected_cards):
+        """
+        Take care of administration after a set was found, thus updating the
+        neccessary variables.
+        """
+        self.results.number_sets_found += 1
+        self.results.add_time_interval()
+        search_time = round(sum(self.results.search_times), 2)
+        result = {'set': selected_cards[:],
+                  'time': search_time,
+                  'length_bar':  int(2 * search_time),
+                  'hint': self.hint}
+        self.results.statistics_sets.append(result)
+        self.results.search_times = []
+        self.correct_set_call = True
 
     def _selected_cards(self, selected_ids):
         """Figure out which cards have been selected and their indices."""
@@ -133,7 +142,7 @@ class Cards(object):
         except ZeroDivisionError:
             self.results.average = 0
 
-        self.results.score = round((27 + self.results.hints + self.results.wrong_sets) * self.results.average, 2)
+        self.results.score = int((27 + self.results.hints + self.results.wrong_sets) * self.results.average)
         self.results.end_of_game = True
 
     def _move_extra_cards(self, indices_extra_cards, to_replace):
@@ -202,3 +211,9 @@ class Results(object):
         self.start_time_game = datetime.now()
         self.total_time = 0
         self.stored = False
+        self.search_times = []
+
+    def add_time_interval(self):
+        interval = (datetime.now() - self.start_time).total_seconds()
+        self.search_times.append(interval)
+        return

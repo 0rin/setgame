@@ -5,7 +5,7 @@ from django.urls import reverse
 from .cards import Deck, Cards
 from .models import Highscore
 from .forms import HighscoreForm
-
+from datetime import datetime
 
 cards = Cards()
 
@@ -27,6 +27,7 @@ def game(request):
                     cards.end_game()
                     return redirect(results)
         elif req == 'results':
+            cards.results.add_time_interval()
             return redirect(results)
         else:
             cards.process_selection(req)
@@ -51,6 +52,7 @@ def results(request):
             return redirect(scores)
         elif req == 'back_to_game':
             cards.hint = False
+            cards.results.start_time = datetime.now()
             return redirect(game)
     context = {'results': cards.results.statistics_sets,
                'number_sets_found': cards.results.number_sets_found,
@@ -70,7 +72,6 @@ def scores(request):
         if score_form.is_valid():
             data = score_form.cleaned_data
             form_name = data['name']
-            form_total_time = data['total_time']
             form_total_time = data['total_time']
             form_average = data['average']
             form_hints = data['hints']
