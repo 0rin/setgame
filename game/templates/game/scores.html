@@ -1,9 +1,15 @@
 {% extends 'game/base.html' %}
 {% load static %}
 
-{% block main_content %}
-<table id="scores">
+{% block header %}
+    <link rel="stylesheet" href="{% static '/game/css/scores.css' %}">
+{% endblock %}
+
+{% block body %}
+<div id="table_section">
+<table>
     <tr>
+        <th>Place</th>
         <th>Name</th>
         <th>Total time</th>
         <th>Average time per SET</th>
@@ -13,6 +19,7 @@
     </tr>
     {% for result in stored_results %}
         <tr>
+            <td>{{ forloop.counter }}</td>
             <td>{{ result.name }}</td>
             <td>{{ result.total_time }}</td>
             <td>{{ result.average }}</td>
@@ -22,6 +29,7 @@
         </tr>
     {% endfor %}
 </table>
+<div id="control_section">
 <form action="{% url 'results' %}" method="POST">
     {% csrf_token %}
     <button class="button" id="results" type="submit" name="req"
@@ -29,4 +37,5 @@
         Close
     </button>
 </form>
+</div>
 {% endblock %}

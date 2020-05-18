@@ -117,10 +117,11 @@ def test_full_game():
             cards.process_selection(ids)
             cards.results.end_of_game = False
             assert(len(cards.cards_open) % 3 == 0)
-            logging.info('Found set nr {}'.format(cards.results.number_sets_found))
+            logging.info('Found set nr {}'
+                         .format(cards.results.number_sets_found))
         elif len(cards.deck) >= 3:
             cards.open_extra_cards()
-            assert(len(cards.cards_open) < 22)  # 20 cards garantees a set
+            assert(len(cards.cards_open) <= 21)  # 20 cards garantees a set
             logging.info('No set, nr cards open goes to {}'
                          .format(len(cards.cards_open)))
             if len(cards.cards_open) > 18:

@@ -84,8 +84,6 @@ def scores(request):
                                      wrong_sets=form_wrong_sets,
                                      score=form_score)
             cards.results.stored = True
-        else:
-            print(score_form.errors)
     context = {'stored_results': Highscore.objects.order_by('score'),
                'form': score_form}
     return render(request, 'game/scores.html', context)

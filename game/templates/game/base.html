@@ -1,23 +1,17 @@
 {% load static %}
 
 <!DOCTYPE html>
-<!-- Comments like this -->
 <html>
   <head>
     <meta charset="utf-8">
     <title>Set Game</title>
-      <!-- Core Stylesheet -->
-  <link rel="stylesheet" href="{% static '/game/css/game.css' %}">
-  <script src="{% static '/game/js/game.js' %}"></script>
+    <link rel="stylesheet" href="{% static '/game/css/base.css' %}">
+    {% block header%}
+    {% endblock %}
   </head>
   <body>
-    <div id="all_containing_section">
-        {% block main_content %}
+        {% block body %}
         {% endblock %}
-    <div id="control_section">
-        {% block buttons_content %}
-        {% endblock %}
-    </div>
     </div>
   </body>
 </html>

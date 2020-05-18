@@ -1,0 +1,88 @@
+#results_section {
+  position: relative;
+  display: table-cell;
+  top: 10px;
+  left: 10px;
+}
+
+#control_section {
+  position: fixed;
+  left: 700px;
+}
+
+#no_sets_yet {
+  padding-top: 50px;
+  padding-left: 100px;
+  color: grey;
+}
+
+#back_to_game {
+  padding: 15px 12px;
+  background-color: Blue;
+}
+
+#view_scores {
+  padding: 15px 20px;
+  background-color: Blue;
+}
+
+.time {
+  padding-left: 20px;
+  display: table-cell;
+}
+
+.bar_container {
+  display: table-cell;
+  position: relative;
+}
+
+.bar {
+  background-color: blue;
+  position: absolute;
+  height: 20px;
+  left: 16px;
+}
+
+#game_not_ended {
+  color: red;
+}
+
+#name_field {
+  width: 260px;
+}
+
+.svg_element {
+  position: absolute;
+  left: 10px;
+}
+
+.card_outline_small {
+  border-radius: 15px;
+  width: 75px;
+  height: 110px;
+  position: relative;
+}
+
+.nr_1_1 {
+  top: 40px;
+}
+
+.nr_2_1 {
+  top: 28px;
+}
+
+.nr_2_2 {
+  top: 52px;
+}
+
+.nr_3_1 {
+  top: 18px;
+}
+
+.nr_3_2 {
+  top: 40px;
+}
+
+.nr_3_3 {
+  top: 62px;
+}

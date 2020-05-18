@@ -105,11 +105,11 @@ class Cards(object):
         for i, card in enumerate(self.cards_open):
             for card_id in selected_ids:
                 if card['id'] == int(card_id):
-                    result.append({'card': card, 'index': i })
+                    result.append({'card': card, 'index': i})
                     selected_ids.remove(card_id)
         return result
 
-    def _handle_found_set(self, indices):
+    def _handle_found_set(self, indices_of_set):
         """
         Handles the correct procedure after a set was found. Either replaces
         the cards from the set with new cards, or with the extra cards that
@@ -117,9 +117,9 @@ class Cards(object):
         """
         to_replace = []
         indices_extra_cards = self._indices_extra_cards(len(self.cards_open))
-        for index in indices:
+        for index in indices_of_set:
             if index in indices_extra_cards:
-                # Extra card and part of set, will be removed later.
+                # Extra card and part of set, nominate position for removal.
                 self.cards_open[index] = None
                 indices_extra_cards.remove(index)
                 continue
@@ -130,24 +130,26 @@ class Cards(object):
             else:
                 self.cards_open[index] = self._take_n_cards(1)[0]
         if indices_extra_cards:
-            self._move_extra_cards(indices_extra_cards, to_replace)
+            self._handle_extra_cards(indices_extra_cards, to_replace)
         self.cards_open = list(filter(None, self.cards_open))
 
     def end_game(self):
         """Ensure end of game settings are handled."""
         self.results.total_time =\
-            round((datetime.now() - self.results.start_time_game).total_seconds(), 2)
-        try:
-            self.results.average = round(self.results.total_time / self.results.number_sets_found, 2)
-        except ZeroDivisionError:
-            self.results.average = 0
+            round((datetime.now() - self.results.start_time_game)
+                  .total_seconds(), 2)
+        self.results.average =\
+            round(self.results.total_time / self.results.number_sets_found, 2)
 
-        self.results.score = int((27 + self.results.hints + self.results.wrong_sets) * self.results.average)
+        self.results.score =\
+            int((27 + self.results.hints + self.results.wrong_sets) *
+                self.results.average)
         self.results.end_of_game = True
 
-    def _move_extra_cards(self, indices_extra_cards, to_replace):
+    def _handle_extra_cards(self, indices_extra_cards, to_replace):
         # Copy extra cards to the positions where cards need to be replaced.
-        # Then turn the extra card to None, to nominate it for removal.
+        # Then turn the extra card to None, to nominate this position for
+        # removal.
         # NOTE: The extra cards are not part of the set, those cards are
         # already removed.
         for index in to_replace:
@@ -196,6 +198,7 @@ class Cards(object):
                 return False
         return True
 
+
 class Results(object):
     """This class keeps track of all results and statistics."""
 
@@ -214,6 +217,10 @@ class Results(object):
         self.search_times = []
 
     def add_time_interval(self):
+        """
+        Adds the time spent so far on searching for a set to a list.
+        Used to pause the timer when leaving the game page.
+        """
         interval = (datetime.now() - self.start_time).total_seconds()
         self.search_times.append(interval)
         return

@@ -1,0 +1,109 @@
+body {
+  display: table-row;
+}
+
+.button {
+  padding-top: 10px;
+  border-radius: 15px;
+  border: solid;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+}
+
+#control_section {
+  position: relative;
+  display: table-cell;
+  padding-left: 60px;
+}
+
+#dashboard {
+  display: table-cell;
+  color: black;
+  background-color: LightSteelBlue;
+  text-align: left;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+}
+
+#new_game {
+  padding: 16px 25px;
+  background-color: ForestGreen;
+  float: left;
+}
+
+#results {
+  padding: 17px 41px;
+  background-color: Blue;
+}
+
+.card_outline {
+  white-space: initial;
+  border: 2px solid black;
+  border-radius: 25px;
+  width: 170px;
+  height: 250px;
+  display: table-cell;
+  position: relative;
+}
+
+.red {
+  stroke: red;
+}
+
+.green {
+  stroke: green;
+}
+
+.blue {
+  stroke: blue;
+}
+
+.open {
+  fill: none;
+}
+
+.red_solid {
+  fill: red;
+}
+
+.green_solid {
+  fill: green;
+}
+
+.blue_solid {
+  fill: blue;
+}
+
+.red_striped {
+  fill:url(#stripes_red);
+}
+
+.green_striped {
+  fill:url(#stripes_green);
+}
+
+.blue_striped {
+  fill:url(#stripes_blue);
+}
+
+.oval {
+    stroke-width: 30px;
+}
+
+.diamond {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 2px;
+}
+
+.diamond_small {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1px;
+}
+
+.rectangle {
+  stroke-width: 30px;
+}

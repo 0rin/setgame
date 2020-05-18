@@ -1,36 +1,8 @@
-#all_containing_section {
-  display: table-row;
-}
-
-#control_section {
-  display: table-cell;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-#results_section {
-  display: table-cell;
-}
-
 #playing_section {
+  position: relative;
   display: table-cell;
-}
-
-.button {
-  padding-top: 10px;
-  border-radius: 15px;
-  border: solid;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 20px;
-}
-
-#new_game {
-  padding: 16px 25px;
-  background-color: ForestGreen;
-  float: left;
+  top: 20px;
+  left: 40px;
 }
 
 #check_set {
@@ -38,112 +10,13 @@
   background-color: darkorange;
 }
 
-#dashboard {
-  color: black;
-  background-color: LightSteelBlue;
-  text-align: left;
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-bottom: 10px;
-}
-
-#results {
-  padding: 17px 41px;
-  background-color: Blue;
-}
-
-#back_to_game {
-  padding: 15px 12px;
-  background-color: Blue;
-}
-
-#view_scores {
-  padding: 15px 20px;
-  background-color: Blue;
-}
-
 .svg_element {
   position: absolute;
   left: 3px;
 }
 
-.red {
-  stroke: red;
-}
-
-.green {
-  stroke: green;
-}
-
-.blue {
-  stroke: blue;
-}
-
-.open {
-  fill: none;
-}
-
-.red_solid {
-  fill: red;
-}
-
-.green_solid {
-  fill: green;
-}
-
-.blue_solid {
-  fill: blue;
-}
-
-.red_striped {
-  fill:url(#stripes_red);
-}
-
-.green_striped {
-  fill:url(#stripes_green);
-}
-
-.blue_striped {
-  fill:url(#stripes_blue);
-}
-
-.oval {
-    stroke-width: 30px;
-}
-
-.diamond {
-  vector-effect: non-scaling-stroke;
-  stroke-width: 2px;
-}
-
-.diamond_small {
-  vector-effect: non-scaling-stroke;
-  stroke-width: 1px;
-}
-
-.rectangle {
-  stroke-width: 30px;
-}
-
 .row {
   display: table-row;
-}
-
-.card_outline {
-  white-space: initial;
-  border: 2px solid black;
-  border-radius: 25px;
-  width: 170px;
-  height: 250px;
-  display: table-cell;
-  position: relative;
-}
-
-.card_outline_small {
-  border-radius: 15px;
-  width: 75px;
-  height: 110px;
-  position: relative;
 }
 
 .blank {
@@ -157,51 +30,6 @@
 
 .row_space {
   height: 10px;
-}
-
-.nr_1_1_small {
-  top: 40px;
-}
-
-.nr_2_1_small {
-  top: 28px;
-}
-
-.nr_2_2_small {
-  top: 52px;
-}
-
-.nr_3_1_small {
-  top: 18px;
-}
-
-.nr_3_2_small {
-  top: 40px;
-}
-
-.nr_3_3_small {
-  top: 62px;
-}
-
-.svg_element_small {
-  position: absolute;
-  left: 10px;
-}
-
-.bar_container {
-  display: table-cell;
-  position: relative;
-}
-.bar {
-  background-color: blue;
-  position: absolute;
-  height: 20px;
-  left: 16px;
-}
-
-.time {
-  padding-left: 20px;
-  display: table-cell;
 }
 
 .nr_1_1 {
@@ -226,17 +54,4 @@
 
 .nr_3_3 {
   top: 150px;
-}
-
-table, th, td {
-  border-collapse: collapse;
-  border: 1px solid black;
-}
-
-#name_field {
-  width: 170px;
-}
-
-#game_not_ended {
-  color: red;
 }
