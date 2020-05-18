@@ -8,7 +8,7 @@
 * [Screenshots](#screenshots)
 * [Technologies](#technologies)
 * [Setup](#setup)
-* [Future Development](#Future Development)
+* [Future Development](#Future-Development)
 * [Status](#status)
 * [Contact](#contact)
 
@@ -19,8 +19,8 @@ I tried to limit the use of third party libraries (like Bootstrap or JQuery)
 to avoid adding unneccessary complexity into a small project. And also because I wanted to exercise the bare web technologies.
 
 ## Screenshots
-![Example screenshot](./staticfiles/Images/Screenshot_Game.png)
-![Example screenshot](./staticfiles/Images/Screenshot_Results.png)
+![Example screenshot](./staticfiles/images/Screenshot_Game.png)
+![Example screenshot](./staticfiles/images/Screenshot_Results.png)
 
 ## Technologies
 * Python - version 3.8.2
