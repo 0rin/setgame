@@ -1,3 +1,5 @@
+[![BCH compliance](https://bettercodehub.com/edge/badge/0rin/setgame?branch=master)](https://bettercodehub.com/)
+
 # SET game
 > This project is an implementation of the card game SET.
 
@@ -54,6 +56,10 @@ To-do list:
 
 ## Status
 Project is: _in progress_
+
+## License
+Copyright © 2020, [Orin Habich](https://github.com/0rin/setgame).
+Released as [unlicensed](LICENSE) public domain release.
 
 ## Contact
 Created by Orin Habich. Feel free to contact me!  
