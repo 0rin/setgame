@@ -15,7 +15,7 @@
         <th>Average time per SET</th>
         <th>Hints</th>
         <th>Wrong SET calls</th>
-        <th>Score</th>
+        <th>Score*</th>
     </tr>
     {% for result in stored_results %}
         <tr>
@@ -29,6 +29,7 @@
         </tr>
     {% endfor %}
 </table>
+<p>* <small>score = (27 + hints + wrong_SET_calls) &#215 average_time_per_set</small></p>
 <div id="control_section">
 <form action="{% url 'results' %}" method="POST">
     {% csrf_token %}
