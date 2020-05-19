@@ -18,14 +18,17 @@ def play(request):
             req = 'new_game'
         if req == 'new_game':
             game.new_game()
-        elif req == 'check_set':
-            game.hint = game.check_for_set()[0]
+        elif req == 'find_set':
+            game.hint = game.find_set()[0]
             if not game.hint:
                 if len(game.deck) >= 3:
                     game.open_extra_cards()
                 else:
                     game.end_game()
                     return redirect(results)
+        elif req == 'refused_hint':
+            game.results.hints -= 1
+            game.hint = False
         elif req == 'results':
             game.results.add_time_interval()
             return redirect(results)
@@ -84,6 +87,7 @@ def scores(request):
                                      wrong_sets=form_wrong_sets,
                                      score=form_score)
             game.results.stored = True
+        return HttpResponseRedirect(reverse('scores'))
     context = {'stored_results': Highscore.objects.order_by('score'),
                'form': score_form}
     return render(request, 'game/scores.html', context)

@@ -52,7 +52,7 @@ class Game(object):
         for i in indices_for_extra_cards:
             self.cards_open.insert(i, self._take_n_cards(1)[0])
 
-    def check_for_set(self):
+    def find_set(self):
         """
         Determines if there is a set in the current open cards. Returns an
         array with, either the combination of cards that is a set, or False.

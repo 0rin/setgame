@@ -33,11 +33,15 @@ function confirmSetExistence(hint_id) {
     if (confirm('There is a set. Want a hint?')) {
         document.getElementById(hint_id).style.borderWidth = "5px";
     }
+    else {
+        document.getElementById("hint").value = "refused_hint";
+        document.hint_form.submit();
+    }
 }
 
 function incorrectSet() {
     if (wrong_set) {
-        wrong_set = true
+        wrong_set = true;
         alert('That is not a set.');
     }
 }
