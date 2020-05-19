@@ -44,13 +44,13 @@ Go to your browser (Firefox is recommended) and visit:
 localhost:8000
 ```
 
-This app was also deployed to <https://orinsetgame.herokuapp.com/> just to see how that worked out. There are some expected errors because the database (sqlite3) is not suitable for usage like this.
+This app was also deployed to <https://orinsetgame.herokuapp.com/> just to see how that worked out. The game does not work properly yet in that environment.
 
 ## Future Development
 To-do list:
 
-* Explain the score function being used on the pages with highscores
-* Add functional testing with Selenium
+* Explain the score function being used on the pages with highscores (Done)
+* Add functional testing with Selenium (Blocked by error)
 * Improve styling
 * Add timer on game page, to see live how long the search for a set is taking
 
