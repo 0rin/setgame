@@ -57,8 +57,6 @@ class Game(object):
         Determines if there is a set in the current open cards. Returns an
         array with, either the combination of cards that is a set, or False.
         """
-        self.results.correct_set_call = True
-        self.results.hints += 1
         for combo in combinations(self.cards_open, 3):
             if self._validate_set(combo, False):
                 return combo
@@ -82,6 +80,19 @@ class Game(object):
         self.results.start_time = datetime.now()
         self.results.end_of_game = False
         self.hint = False
+
+    def end_game(self):
+        """Ensure end of game settings are handled."""
+        self.results.total_time =\
+            round((datetime.now() - self.results.start_time_game)
+                  .total_seconds(), 2)
+        self.results.average =\
+            round(self.results.total_time / self.results.number_sets_found, 2)
+
+        self.results.score =\
+            int((27 + self.results.hints + self.results.wrong_sets) *
+                self.results.average)
+        self.results.end_of_game = True
 
     def _administration_of_set(self, selected_cards):
         """
@@ -133,19 +144,6 @@ class Game(object):
             self._handle_extra_cards(indices_extra_cards, to_replace)
         self.cards_open = list(filter(None, self.cards_open))
 
-    def end_game(self):
-        """Ensure end of game settings are handled."""
-        self.results.total_time =\
-            round((datetime.now() - self.results.start_time_game)
-                  .total_seconds(), 2)
-        self.results.average =\
-            round(self.results.total_time / self.results.number_sets_found, 2)
-
-        self.results.score =\
-            int((27 + self.results.hints + self.results.wrong_sets) *
-                self.results.average)
-        self.results.end_of_game = True
-
     def _handle_extra_cards(self, indices_extra_cards, to_replace):
         # Copy extra cards to the positions where cards need to be replaced.
         # Then turn the extra card to None, to nominate this position for
@@ -169,7 +167,15 @@ class Game(object):
         return cards_taken
 
     def _indices_extra_cards(self, nr_cards):
-        """Determines which indices extra cards have."""
+        """
+        Determines which indices extra cards have.
+
+        NOTE: Since a set is garanteed with 21 cards the usual outcomes of this
+        method are simply '[4, 9, 14]' and '[5, 11, 17]'. These numbers are
+        not successive due to the fact that it is hard to fill HTML column-
+        wise. The cards are therefore put row-wise on the screen,
+        resulting in these numbers for extra cards.
+        """
         if nr_cards > 12:
             nr_cards_per_row = int(nr_cards / 3)
             return [(i + 1) * (nr_cards_per_row - 1) + i for i in range(3)]

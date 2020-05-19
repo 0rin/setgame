@@ -11,30 +11,9 @@ game = Game()
 
 
 def play(request):
+    """Handle all logic around playing the game."""
     if request.method == 'POST':
-        try:
-            req = request.POST['req']
-        except KeyError:
-            req = 'new_game'
-        if req == 'new_game':
-            game.new_game()
-        elif req == 'find_set':
-            game.hint = game.find_set()[0]
-            if not game.hint:
-                if len(game.deck) >= 3:
-                    game.open_extra_cards()
-                else:
-                    game.end_game()
-                    return redirect(results)
-        elif req == 'refused_hint':
-            game.results.hints -= 1
-            game.hint = False
-        elif req == 'results':
-            game.results.add_time_interval()
-            return redirect(results)
-        else:
-            game.process_selection(req)
-        return HttpResponseRedirect(reverse('play'))
+        _handle_play_post(request)
     elif all(card['blank'] for card in game.cards_open):
         game.end_game()
         return redirect(results)
@@ -48,7 +27,42 @@ def play(request):
     return render(request, 'game/game.html', context)
 
 
+def _handle_play_post(request):
+    """Handle correct behaviour after user input on game page."""
+    try:
+        req = request.POST['req']
+    except KeyError:
+        req = 'new_game'
+    if req == 'new_game':
+        game.new_game()
+    elif req == 'find_set':
+        _handle_find_set_request()
+    elif req == 'refused_hint':
+        game.results.hints -= 1
+        game.hint = False
+    elif req == 'results':
+        game.results.add_time_interval()
+        return redirect(results)
+    else:
+        game.process_selection(req)
+    return HttpResponseRedirect(reverse('play'))
+
+
+def _handle_find_set_request():
+    """Handle request on finding a set. Triggered by the 'No SET' button."""
+    game.results.correct_set_call = True
+    game.results.hints += 1
+    game.hint = game.find_set()[0]
+    if not game.hint:
+        if len(game.deck) >= 3:
+            game.open_extra_cards()
+        else:
+            game.end_game()
+            return redirect(results)
+
+
 def results(request):
+    """Handle user requests on results page, like fetching data."""
     if request.method == 'POST':
         req = request.POST['req']
         if req == 'view_scores':
@@ -70,6 +84,7 @@ def results(request):
 
 
 def scores(request):
+    """Handle user requests about scores."""
     score_form = HighscoreForm(request.POST or None)
     if request.method == 'POST':
         if score_form.is_valid():
