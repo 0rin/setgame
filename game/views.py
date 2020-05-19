@@ -2,46 +2,46 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .cards import Deck, Cards
+from .game import Game
 from .models import Highscore
 from .forms import HighscoreForm
 from datetime import datetime
 
-cards = Cards()
+game = Game()
 
 
-def game(request):
+def play(request):
     if request.method == 'POST':
         try:
             req = request.POST['req']
         except KeyError:
             req = 'new_game'
         if req == 'new_game':
-            cards.new_game()
+            game.new_game()
         elif req == 'check_set':
-            cards.hint = cards.check_for_set()[0]
-            if not cards.hint:
-                if len(cards.deck) >= 3:
-                    cards.open_extra_cards()
+            game.hint = game.check_for_set()[0]
+            if not game.hint:
+                if len(game.deck) >= 3:
+                    game.open_extra_cards()
                 else:
-                    cards.end_game()
+                    game.end_game()
                     return redirect(results)
         elif req == 'results':
-            cards.results.add_time_interval()
+            game.results.add_time_interval()
             return redirect(results)
         else:
-            cards.process_selection(req)
-        return HttpResponseRedirect(reverse('game'))
-    elif all(card['blank'] for card in cards.cards_open):
-        cards.end_game()
+            game.process_selection(req)
+        return HttpResponseRedirect(reverse('play'))
+    elif all(card['blank'] for card in game.cards_open):
+        game.end_game()
         return redirect(results)
-    elif cards.results.end_of_game:
+    elif game.results.end_of_game:
         return redirect(results)
-    context = {'cards_open': cards.cards_open,
-               'hint': cards.hint,
-               'row_length': len(cards.cards_open)/3,
-               'correct_set_call': cards.correct_set_call,
-               'number_sets_found': cards.results.number_sets_found}
+    context = {'cards_open': game.cards_open,
+               'hint': game.hint,
+               'row_length': len(game.cards_open)/3,
+               'correct_set_call': game.correct_set_call,
+               'number_sets_found': game.results.number_sets_found}
     return render(request, 'game/game.html', context)
 
 
@@ -51,18 +51,18 @@ def results(request):
         if req == 'view_scores':
             return redirect(scores)
         elif req == 'back_to_game':
-            cards.hint = False
-            cards.results.start_time = datetime.now()
-            return redirect(game)
-    context = {'results': cards.results.statistics_sets,
-               'number_sets_found': cards.results.number_sets_found,
-               'end_of_game': cards.results.end_of_game,
-               'total_time': cards.results.total_time,
-               'average': cards.results.average,
-               'hints': cards.results.hints,
-               'wrong_sets': cards.results.wrong_sets,
-               'score': cards.results.score,
-               'stored': cards.results.stored}
+            game.hint = False
+            game.results.start_time = datetime.now()
+            return redirect(play)
+    context = {'results': game.results.statistics_sets,
+               'number_sets_found': game.results.number_sets_found,
+               'end_of_game': game.results.end_of_game,
+               'total_time': game.results.total_time,
+               'average': game.results.average,
+               'hints': game.results.hints,
+               'wrong_sets': game.results.wrong_sets,
+               'score': game.results.score,
+               'stored': game.results.stored}
     return render(request, 'game/results.html', context)
 
 
@@ -83,7 +83,7 @@ def scores(request):
                                      hints=form_hints,
                                      wrong_sets=form_wrong_sets,
                                      score=form_score)
-            cards.results.stored = True
+            game.results.stored = True
     context = {'stored_results': Highscore.objects.order_by('score'),
                'form': score_form}
     return render(request, 'game/scores.html', context)

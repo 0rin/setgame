@@ -3,8 +3,8 @@ from itertools import combinations
 from datetime import datetime
 
 
-class Deck(object):
-    """Creates a deck of set cards and provides shuffled copies of it. """
+class Cards(object):
+    """Creates a deck of SET cards and provides shuffled copies of it. """
     original_deck = [{'color': color,
                       'shading': shading,
                       'range': range(number),
@@ -24,7 +24,7 @@ class Deck(object):
         return deck_copy
 
 
-class Cards(object):
+class Game(object):
     """
     This class takes care of all the handling of cards. Like distributing
     (possibly extra) cards and validating sets. Also takes care of preserving
@@ -36,7 +36,7 @@ class Cards(object):
 
     def new_game(self):
         self.results = Results()
-        self.deck = Deck().new_shuffled_deck()
+        self.deck = Cards().new_shuffled_deck()
         self.cards_open = self._take_n_cards(12)
         self.correct_set_call = True
         self.hint = False
@@ -73,7 +73,7 @@ class Cards(object):
         selected = self._selected_cards(selected_ids)
         selected_cards = [item['card'] for item in selected]
         if self._validate_set(selected_cards):
-            self._administration(selected_cards)
+            self._administration_of_set(selected_cards)
             indices_of_set = [item['index'] for item in selected]
             self._handle_found_set(indices_of_set)
         else:
@@ -83,7 +83,7 @@ class Cards(object):
         self.results.end_of_game = False
         self.hint = False
 
-    def _administration(self, selected_cards):
+    def _administration_of_set(self, selected_cards):
         """
         Take care of administration after a set was found, thus updating the
         neccessary variables.
@@ -178,23 +178,15 @@ class Cards(object):
 
     def _validate_set(self, combo, users_claim=True):
         """Determines if a combination of three cards is a set."""
-        colors = []
-        numbers = []
-        shadings = []
-        shapes = []
+        property_types = ['color', 'number', 'shading', 'shape']
+        properties = []
+        for prop_type in property_types:
+            properties.append([card[prop_type] for card in combo
+                              if not card['blank']])
 
-        for card in combo:
-            if card['blank']:
-                return False
-            colors.append(card['color'])
-            numbers.append(card['number'])
-            shadings.append(card['shading'])
-            shapes.append(card['shape'])
-
-        properties = [colors, numbers, shadings, shapes]
         for prop in properties:
             uniq = list(dict.fromkeys(prop))
-            if len(uniq) == 2:
+            if len(prop) < 3 or len(uniq) == 2:
                 return False
         return True
 

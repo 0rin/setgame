@@ -1,7 +1,7 @@
-from .cards import Deck, Cards
+from .game import Cards, Game
 import logging
 
-logging.basicConfig(level=logging.WARN, filename='test_cards.log')
+logging.basicConfig(level=logging.WARN, filename='test_game.log')
 
 setless = [
     {'color': 'green', 'shading': 'open', 'range': range(0, 2),
@@ -43,91 +43,91 @@ with_set[-1] = {'color': 'red', 'shading': 'open', 'range': range(0, 1),
 
 
 def test_new_shuffled_deck():
-    assert(len(Deck().new_shuffled_deck()) == 81)
+    assert(len(Cards().new_shuffled_deck()) == 81)
 
 
 def test_new_game():
-    cards = Cards()
-    cards.new_game()
-    assert(len(cards.deck) == 69)
-    assert(cards.results.number_sets_found == 0)
-    assert(len(cards.cards_open) == 12)
-    assert(not cards.hint)
-    assert(not cards.results.end_of_game)
-    assert(cards.correct_set_call)
+    game = Game()
+    game.new_game()
+    assert(len(game.deck) == 69)
+    assert(game.results.number_sets_found == 0)
+    assert(len(game.cards_open) == 12)
+    assert(not game.hint)
+    assert(not game.results.end_of_game)
+    assert(game.correct_set_call)
 
 
 def test_open_extra_cards():
-    cards = Cards()
-    nr_before = len(cards.cards_open)
-    cards.open_extra_cards()
-    assert(len(cards.cards_open) == nr_before + 3)
+    game = Game()
+    nr_before = len(game.cards_open)
+    game.open_extra_cards()
+    assert(len(game.cards_open) == nr_before + 3)
 
 
 def test_check_for_set():
-    cards = Cards()
+    game = Game()
 
     # There is no set
-    cards.cards_open = setless
-    assert(not cards.check_for_set()[0])
+    game.cards_open = setless
+    assert(not game.check_for_set()[0])
 
     # There is a set
-    cards.cards_open = with_set
-    cards.check_for_set()
-    assert(cards.check_for_set()[0] == with_set[0])
+    game.cards_open = with_set
+    game.check_for_set()
+    assert(game.check_for_set()[0] == with_set[0])
 
 
 def test_process_selection():
-    cards = Cards()
+    game = Game()
     selection = '42,78,6'
-    cards.cards_open = with_set
-    cards.process_selection(selection)
-    assert(cards.correct_set_call)
-    assert(cards.results.number_sets_found == 1)
+    game.cards_open = with_set
+    game.process_selection(selection)
+    assert(game.correct_set_call)
+    assert(game.results.number_sets_found == 1)
 
 
 def test_indices_extra_cards():
-    cards = Cards()
-    assert(cards._indices_extra_cards(12) == [])
-    assert(cards._indices_extra_cards(15) == [4, 9, 14])
-    assert(cards._indices_extra_cards(18) == [5, 11, 17])
-    assert(cards._indices_extra_cards(21) == [6, 13, 20])
+    game = Game()
+    assert(game._indices_extra_cards(12) == [])
+    assert(game._indices_extra_cards(15) == [4, 9, 14])
+    assert(game._indices_extra_cards(18) == [5, 11, 17])
+    assert(game._indices_extra_cards(21) == [6, 13, 20])
 
 
 def test_handling_extra_cards():
-    cards = Cards()
-    cards.cards_open = setless + setless_extra
-    assert(len(cards.cards_open) == 15)
-    cards.check_for_set()
-    assert(not cards.hint)
-    cards.open_extra_cards()
-    assert(len(cards.cards_open) == 18)
+    game = Game()
+    game.cards_open = setless + setless_extra
+    assert(len(game.cards_open) == 15)
+    game.check_for_set()
+    assert(not game.hint)
+    game.open_extra_cards()
+    assert(len(game.cards_open) == 18)
 
 
 def test_full_game():
     logging.info('------------Start new game')
-    cards = Cards()
-    cards.new_game()
-    while not cards.results.end_of_game:
-        assert(len(cards.cards_open) % 3 == 0)
-        assert(len(cards.deck) % 3 == 0)
-        a_set = cards.check_for_set()
+    game = Game()
+    game.new_game()
+    while not game.results.end_of_game:
+        assert(len(game.cards_open) % 3 == 0)
+        assert(len(game.deck) % 3 == 0)
+        a_set = game.check_for_set()
         if a_set[0]:
             ids = ','.join(str(card['id']) for card in a_set)
-            cards.process_selection(ids)
-            cards.results.end_of_game = False
-            assert(len(cards.cards_open) % 3 == 0)
+            game.process_selection(ids)
+            game.results.end_of_game = False
+            assert(len(game.cards_open) % 3 == 0)
             logging.info('Found set nr {}'
-                         .format(cards.results.number_sets_found))
-        elif len(cards.deck) >= 3:
-            cards.open_extra_cards()
-            assert(len(cards.cards_open) <= 21)  # 20 cards garantees a set
+                         .format(game.results.number_sets_found))
+        elif len(game.deck) >= 3:
+            game.open_extra_cards()
+            assert(len(game.cards_open) <= 21)  # 20 cards garantees a set
             logging.info('No set, nr cards open goes to {}'
-                         .format(len(cards.cards_open)))
-            if len(cards.cards_open) > 18:
+                         .format(len(game.cards_open)))
+            if len(game.cards_open) > 18:
                 logging.warning('This should be really exceptional')
         else:
-            cards.end_game()
+            game.end_game()
 
 
 def test_multiple_full_games():

@@ -12,7 +12,7 @@
     {% if forloop.counter0|divisibleby:row_length %}
         <div class="row">
     {% endif %}
-    <form action="{% url 'game' %}" method="POST" id="cardForm">
+    <form action="{% url 'play' %}" method="POST" id="cardForm">
         {% csrf_token %}
         <button type="button"
             class="card_outline {{ card.blank }}"
@@ -68,14 +68,14 @@
     <p class="button" id="dashboard">
         SETS found: {{ number_sets_found }}
     </p>
-    <form action="{% url 'game' %}" method="POST" id="another_game">
+    <form action="{% url 'play' %}" method="POST" id="another_game">
         {% csrf_token %}
         <button class="button" id="new_game" type="submit" name="req"
             value="new_game">
             New Game
         </button>
     </form>
-    <form action="{% url 'game' %}" method="POST">
+    <form action="{% url 'play' %}" method="POST">
         {% csrf_token %}
         <button class="button" id="check_set" type="submit" name="req"
             value="check_set">
