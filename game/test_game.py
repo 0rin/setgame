@@ -64,16 +64,16 @@ def test_open_extra_cards():
     assert(len(game.cards_open) == nr_before + 3)
 
 
-def test__try_find_set():
+def test_try_find_set():
     game = Game()
 
     # There is no set
     game.cards_open = setless
-    assert(not game._try_find_set()[0])
+    assert(not game.try_find_set()[0])
 
     # There is a set
     game.cards_open = with_set
-    assert(game._try_find_set()[0] == with_set[0])
+    assert(game.try_find_set()[0] == with_set[0])
 
 
 def test_process_selection():
@@ -97,7 +97,7 @@ def test_handling_extra_cards():
     game = Game()
     game.cards_open = setless + setless_extra
     assert(len(game.cards_open) == 15)
-    game._try_find_set()
+    game.try_find_set()
     assert(not game.hint)
     game.open_extra_cards()
     assert(len(game.cards_open) == 18)
@@ -110,7 +110,7 @@ def test_full_game():
     while not game.results.end_of_game:
         assert(len(game.cards_open) % 3 == 0)
         assert(len(game.deck) % 3 == 0)
-        a_set = game._try_find_set()
+        a_set = game.try_find_set()
         if a_set[0]:
             ids = ','.join(str(card['id']) for card in a_set)
             game.process_selection(ids)

@@ -10,14 +10,29 @@ game = Game()
 
 
 def play(request):
-    """Handle logic related to playing the game."""
-    url_direction = ''
+    """Handle all logic around playing the game."""
     if request.method == 'POST':
-        url_direction = _play_post(request.POST['req'])
-    elif game.no_cards_left() or url_direction == 'results':
+        req = request.POST['req']
+        if req == 'new_game':
+            game.new_game()
+        elif req == 'try_find_set':
+            game.hint = game.try_find_set()[0]
+            if not game.hint:
+                if len(game.deck) >= 3:
+                    game.open_extra_cards()
+                else:
+                    game.end_game()
+                    return redirect(results)
+        elif req == 'refused_hint':
+            game.refused_hint()
+        elif req == 'results':
+            game.results.add_time_interval()
+            return redirect(results)
+        else:
+            game.process_selection(req)
+        return HttpResponseRedirect(reverse('play'))
+    elif game.no_cards_left():
         game.end_game()
-        return redirect(results)
-    elif game.results.end_of_game:
         return redirect(results)
     context = {'cards_open': game.cards_open,
                'hint': game.hint,
@@ -25,23 +40,6 @@ def play(request):
                'correct_set_call': game.correct_set_call,
                'number_sets_found': game.results.number_sets_found}
     return render(request, 'game/game.html', context)
-
-
-def _play_post(req):
-    """Handle logic of POST request to play-view"""
-    url_direction = ''
-    if req == 'new_game':
-        game.new_game()
-    elif req == 'try_find_set':
-        url_direction = game.process_set_existence_doubt()
-    elif req == 'refused_hint':
-        game.refused_hint()
-    elif req == 'results':
-        game.results.add_time_interval()
-        url_direction = 'result'
-    else:
-        game.process_selection(req)
-    return url_direction
 
 
 def results(request):

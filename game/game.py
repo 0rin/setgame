@@ -51,12 +51,15 @@ class Game(object):
             self._indices_extra_cards(len(self.cards_open) + 3)
         for i in indices_for_extra_cards:
             self.cards_open.insert(i, self._take_n_cards(1)[0])
+        self.results.hints -= 1
 
-    def _try_find_set(self):
+    def try_find_set(self):
         """
         Determines if there is a set in the current open cards. Returns an
         array with the combination of cards that is a set, or False.
         """
+        self.results.correct_set_call = True
+        self.results.hints += 1
         for combo in combinations(self.cards_open, 3):
             if self._validate_set(combo, False):
                 return combo
@@ -108,6 +111,7 @@ class Game(object):
             if len(self.deck) >= 3:
                 self.open_extra_cards()
             else:
+                self.end_game()
                 return 'results'
 
     def no_cards_left(self):

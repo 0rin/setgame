@@ -77,7 +77,7 @@
             No SET
         </button>
     </form>
-    <form action="{% url 'results' %}" method="POST">
+    <form action="{% url 'play' %}" method="POST">
         {% csrf_token %}
         <button class="button" id="results" type="submit" name="req" value="results">
             Results
