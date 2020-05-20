@@ -51,6 +51,8 @@ To-do list:
 
 * Explain the score function being used on the pages with highscores (Done)
 * Add functional testing with Selenium (Blocked by error)
+* Refactor views from functions into class based views
+* Add integration tests by testing views
 * Improve styling
 * Add timer on game page, to see live how long the search for a set is taking
 
