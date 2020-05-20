@@ -52,10 +52,10 @@ class Game(object):
         for i in indices_for_extra_cards:
             self.cards_open.insert(i, self._take_n_cards(1)[0])
 
-    def find_set(self):
+    def _try_find_set(self):
         """
         Determines if there is a set in the current open cards. Returns an
-        array with, either the combination of cards that is a set, or False.
+        array with the combination of cards that is a set, or False.
         """
         for combo in combinations(self.cards_open, 3):
             if self._validate_set(combo, False):
@@ -93,6 +93,27 @@ class Game(object):
             int((27 + self.results.hints + self.results.wrong_sets) *
                 self.results.average)
         self.results.end_of_game = True
+
+    def refused_hint(self):
+        """Resets certain variables."""
+        self.results.hints -= 1
+        self.hint = False
+
+    def process_set_existence_doubt(self):
+        """Processes the existential question 'is there a set?'"""
+        self.results.correct_set_call = True
+        self.results.hints += 1
+        self.hint = self._try_find_set()[0]
+        if not self.hint:
+            if len(self.deck) >= 3:
+                self.open_extra_cards()
+            else:
+                return 'results'
+
+    def no_cards_left(self):
+        """Check if there are any cards left in the game."""
+        return all(card['blank'] for card in self.cards_open) and\
+            len(self.deck) == 0
 
     def _administration_of_set(self, selected_cards):
         """

@@ -1,44 +1,20 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from datetime import datetime
 from .game import Game
 from .models import Highscore
 from .forms import HighscoreForm
-from datetime import datetime
 
 game = Game()
 
 
 def play(request):
-    """Handle all logic around playing the game."""
+    """Handle logic related to playing the game."""
+    url_direction = ''
     if request.method == 'POST':
-        try:
-            req = request.POST['req']
-        except KeyError:
-            req = 'new_game'
-        if req == 'new_game':
-            game.new_game()
-        elif req == 'find_set':
-            game.results.correct_set_call = True
-            game.results.hints += 1
-            game.hint = game.find_set()[0]
-            if not game.hint:
-                if len(game.deck) >= 3:
-                    game.open_extra_cards()
-                else:
-                    game.end_game()
-                    return redirect(results)
-        elif req == 'refused_hint':
-            game.results.hints -= 1
-            game.hint = False
-        elif req == 'results':
-            game.results.add_time_interval()
-            return redirect(results)
-        else:
-            game.process_selection(req)
-        return HttpResponseRedirect(reverse('play'))
-    elif all(card['blank'] for card in game.cards_open):
+        url_direction = _play_post(request.POST['req'])
+    elif game.no_cards_left() or url_direction == 'results':
         game.end_game()
         return redirect(results)
     elif game.results.end_of_game:
@@ -49,6 +25,23 @@ def play(request):
                'correct_set_call': game.correct_set_call,
                'number_sets_found': game.results.number_sets_found}
     return render(request, 'game/game.html', context)
+
+
+def _play_post(req):
+    """Handle logic of POST request to play-view"""
+    url_direction = ''
+    if req == 'new_game':
+        game.new_game()
+    elif req == 'try_find_set':
+        url_direction = game.process_set_existence_doubt()
+    elif req == 'refused_hint':
+        game.refused_hint()
+    elif req == 'results':
+        game.results.add_time_interval()
+        url_direction = 'result'
+    else:
+        game.process_selection(req)
+    return url_direction
 
 
 def results(request):
